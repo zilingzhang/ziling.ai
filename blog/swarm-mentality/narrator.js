@@ -22,8 +22,8 @@
   var LLM_MODEL = window.NARRATOR_LLM_MODEL || 'claude-haiku-4-5';
   var LLM_KEY = window.NARRATOR_LLM_KEY || '';
 
-  var KOKORO_API = window.NARRATOR_KOKORO_API || '';
-  var A2F_API = window.NARRATOR_A2F_API || '';
+  var KOKORO_API = window.NARRATOR_KOKORO_API || '';  // optional server fallback
+  var A2F_API = window.NARRATOR_A2F_API || '';        // optional server fallback
 
   var VOICES_BY_LANG = {
     en: [
@@ -260,28 +260,81 @@
       systemPrompt = customPrompt || null;
     }
 
-    // If no personality and English, skip LLM
+    // If no personality and English, skip LLM entirely
     var needsLLM = systemPrompt || selectedLanguage.id !== 'en';
     if (!needsLLM) {
       return Promise.resolve(text);
     }
 
     // Build system message: personality + language instruction
-    var parts = [];
+    var systemParts = [];
     if (systemPrompt) {
-      parts.push(systemPrompt);
+      systemParts.push(systemPrompt);
     } else if (selectedLanguage.id !== 'en') {
-      // Translation-only mode (no personality): give a clear narrator role
-      parts.push('You are a narrator translating slide content for a spoken presentation. Produce a single natural-sounding narration.');
+      systemParts.push('You are a narrator translating slide content for a spoken presentation. Produce a single natural-sounding narration.');
     }
     if (selectedLanguage.id !== 'en') {
-      parts.push(
+      systemParts.push(
         'Respond entirely in ' + selectedLanguage.name + '. ' +
         'Output ONLY the final narration text. ' +
         'Do NOT include any labels, numbering, alternatives, commentary, or translator notes.'
       );
     }
-    var fullSystem = parts.join('\n\n');
+    var fullSystem = systemParts.join('\n\n');
+    var userMessage = 'Narrate this slide content:\n\n' + text;
+
+    // --- Chrome Rewriter API (free, on-device) ---
+    if (window.ai && window.ai.rewriter) {
+      return window.ai.rewriter.create({
+        tone: 'as-is',
+        sharedContext: fullSystem
+      }).then(function (rewriter) {
+        var p = rewriter.rewrite(userMessage);
+        if (signal) {
+          signal.addEventListener('abort', function () { rewriter.destroy(); });
+        }
+        return p.then(function (result) {
+          rewriter.destroy();
+          return result;
+        });
+      }).catch(function (e) {
+        console.warn('[Narrator] Chrome Rewriter unavailable:', e.message);
+        return rewriteFallbackPromptAPI(fullSystem, userMessage, signal);
+      });
+    }
+
+    return rewriteFallbackPromptAPI(fullSystem, userMessage, signal);
+  }
+
+  /** Chrome Prompt API fallback, then server LLM, then passthrough. */
+  function rewriteFallbackPromptAPI(fullSystem, userMessage, signal) {
+    // --- Chrome Prompt API (free, on-device) ---
+    if (window.ai && window.ai.languageModel) {
+      return window.ai.languageModel.create({
+        systemPrompt: fullSystem
+      }).then(function (session) {
+        if (signal) {
+          signal.addEventListener('abort', function () { session.destroy(); });
+        }
+        return session.prompt(userMessage).then(function (result) {
+          session.destroy();
+          return result;
+        });
+      }).catch(function (e) {
+        console.warn('[Narrator] Chrome Prompt API unavailable:', e.message);
+        return rewriteFallbackServerLLM(fullSystem, userMessage, signal);
+      });
+    }
+
+    return rewriteFallbackServerLLM(fullSystem, userMessage, signal);
+  }
+
+  /** Server LLM fallback (when Chrome AI is unavailable). */
+  function rewriteFallbackServerLLM(fullSystem, userMessage, signal) {
+    if (!LLM_API) {
+      // No rewriting available; return original text
+      return Promise.resolve(userMessage.replace('Narrate this slide content:\n\n', ''));
+    }
 
     return fetch(LLM_API, {
       method: 'POST',
@@ -293,7 +346,7 @@
         model: LLM_MODEL,
         messages: [
           { role: 'system', content: fullSystem },
-          { role: 'user', content: 'Narrate this slide content:\n\n' + text }
+          { role: 'user', content: userMessage }
         ],
         max_tokens: 500
       }),
@@ -305,7 +358,7 @@
       if (data.choices && data.choices[0] && data.choices[0].message) {
         return data.choices[0].message.content.trim();
       }
-      return text;
+      return userMessage.replace('Narrate this slide content:\n\n', '');
     });
   }
 
@@ -314,6 +367,147 @@
   // ---------------------------------------------------------------------------
 
   var a2fCache = {};
+
+  // ---------------------------------------------------------------------------
+  // Browser TTS via kokoro-js Web Worker
+  // ---------------------------------------------------------------------------
+
+  var kokoroWorker = null;
+  var kokoroReady = false;
+  var kokoroInitFailed = false;    // true if model download/init failed
+  var kokoroQueue = [];            // pending {resolve,reject} waiting for model load
+  var kokoroAudioResolve = null;   // resolve for current generate request
+  var kokoroAudioReject = null;
+
+  function ensureKokoroWorker() {
+    if (kokoroWorker) return;
+    kokoroWorker = new Worker('kokoro-worker.js', { type: 'module' });
+    kokoroWorker.postMessage({ type: 'init' });
+
+    kokoroWorker.onmessage = function (e) {
+      if (e.data.type === 'progress') {
+        updateLoadingProgress(e.data);
+      }
+      if (e.data.type === 'ready') {
+        kokoroReady = true;
+        kokoroInitFailed = false;
+        console.log('[Narrator] Kokoro ready — device:', e.data.device || 'unknown');
+        hideLoadingProgress();
+        // Drain queue: call each pending generate callback
+        kokoroQueue.forEach(function (item) { item.onReady(); });
+        kokoroQueue = [];
+      }
+      if (e.data.type === 'audio') {
+        if (kokoroAudioResolve) {
+          kokoroAudioResolve({ pcm: e.data.pcm, sampleRate: e.data.sampleRate });
+          kokoroAudioResolve = null;
+          kokoroAudioReject = null;
+        }
+      }
+      if (e.data.type === 'error') {
+        console.error('[Kokoro Worker]', e.data.message);
+        var err = new Error(e.data.message);
+        if (!kokoroReady) {
+          // Init failed: reject all queued requests so fallback chain triggers
+          kokoroInitFailed = true;
+          hideLoadingProgress();
+          kokoroQueue.forEach(function (item) { item.onError(err); });
+          kokoroQueue = [];
+        }
+        if (kokoroAudioReject) {
+          kokoroAudioReject(err);
+          kokoroAudioResolve = null;
+          kokoroAudioReject = null;
+        }
+      }
+    };
+  }
+
+  /** Encode PCM Float32Array as a 16-bit WAV Blob. */
+  function pcmToWavBlob(pcm, sampleRate) {
+    var numSamples = pcm.length;
+    var bytesPerSample = 2; // 16-bit
+    var dataBytes = numSamples * bytesPerSample;
+    var buffer = new ArrayBuffer(44 + dataBytes);
+    var view = new DataView(buffer);
+
+    function writeStr(offset, str) {
+      for (var i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
+    }
+    writeStr(0, 'RIFF');
+    view.setUint32(4, 36 + dataBytes, true);
+    writeStr(8, 'WAVE');
+    writeStr(12, 'fmt ');
+    view.setUint32(16, 16, true);         // chunk size
+    view.setUint16(20, 1, true);           // PCM format
+    view.setUint16(22, 1, true);           // mono
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * bytesPerSample, true);
+    view.setUint16(32, bytesPerSample, true);
+    view.setUint16(34, 16, true);          // bits per sample
+    writeStr(36, 'data');
+    view.setUint32(40, dataBytes, true);
+
+    for (var i = 0; i < numSamples; i++) {
+      var s = Math.max(-1, Math.min(1, pcm[i]));
+      view.setInt16(44 + i * 2, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+    }
+    return new Blob([buffer], { type: 'audio/wav' });
+  }
+
+  /** Speak text via the in-browser kokoro-js worker (no server needed). */
+  function speakBrowserTTS(text, signal, avatarPlayer) {
+    ensureKokoroWorker();
+
+    // If init already failed, reject immediately so fallback chain runs
+    if (kokoroInitFailed) {
+      return Promise.reject(new Error('Kokoro model failed to load'));
+    }
+
+    return new Promise(function (resolve, reject) {
+      function doGenerate() {
+        if (signal && signal.aborted) { reject(new DOMException('Aborted', 'AbortError')); return; }
+
+        kokoroWorker.postMessage({
+          type: 'generate',
+          text: text,
+          voice: selectedVoice,
+          speed: 1.0
+        });
+
+        kokoroAudioResolve = function (result) {
+          if (signal && signal.aborted) { resolve(); return; }
+
+          // Encode PCM as WAV and use <audio> element for AvatarPlayer compatibility
+          var wavBlob = pcmToWavBlob(result.pcm, result.sampleRate);
+          var audioUrl = URL.createObjectURL(wavBlob);
+          currentAudio = new Audio(audioUrl);
+
+          currentAudio.onended = function () {
+            URL.revokeObjectURL(audioUrl);
+            resolve();
+          };
+          currentAudio.onerror = function (err) {
+            URL.revokeObjectURL(audioUrl);
+            reject(err);
+          };
+          currentAudio.play().then(function () {
+            if (avatarPlayer) avatarPlayer.play(currentAudio);
+          }).catch(function (err) {
+            URL.revokeObjectURL(audioUrl);
+            reject(err);
+          });
+        };
+        kokoroAudioReject = function (err) { reject(err); };
+      }
+
+      if (kokoroReady) {
+        doGenerate();
+      } else {
+        kokoroQueue.push({ onReady: doGenerate, onError: reject });
+      }
+    });
+  }
 
   /** Split text into chunks for per-sentence A2F lip sync + prefetch.
    *  First splits on newlines (bullet points), then on sentence boundaries.
@@ -478,18 +672,26 @@
           if (signal.aborted) return;
           return playA2FData(data, avatarPlayer);
         }).catch(function (err) {
-          console.warn('[Narrator] A2F unavailable, falling back to Kokoro:', err.message);
+          console.warn('[Narrator] A2F unavailable, falling back to TTS:', err.message);
           a2fAvailable = false;
           a2fCache = {};
           if (signal.aborted) return;
-          return speakKokoro(text, signal, avatarPlayer);
+          return speakBrowserTTS(text, signal, avatarPlayer);
         }).then(function () {
           if (signal.aborted) return;
           return speakNext();
         });
       }
 
-      return speakKokoro(text, signal, avatarPlayer).then(function () {
+      // Browser TTS primary, server Kokoro fallback
+      return speakBrowserTTS(text, signal, avatarPlayer).catch(function (err) {
+        if (err.name === 'AbortError') throw err;
+        if (KOKORO_API) {
+          console.warn('[Narrator] Browser TTS failed, falling back to server Kokoro:', err.message);
+          return speakKokoro(text, signal, avatarPlayer);
+        }
+        throw err;
+      }).then(function () {
         if (signal.aborted) return;
         return speakNext();
       });
@@ -497,6 +699,38 @@
 
     prefetchUpcoming();
     return speakNext();
+  }
+
+  // ---------------------------------------------------------------------------
+  // Model loading progress UI
+  // ---------------------------------------------------------------------------
+
+  function updateLoadingProgress(data) {
+    var bar = document.getElementById('narratorLoadingBar');
+    var label = document.getElementById('narratorLoadingLabel');
+    var container = document.getElementById('narratorLoading');
+    if (!container) return;
+    container.style.display = 'block';
+
+    if (data.progress != null && data.total) {
+      var pct = Math.round((data.loaded / data.total) * 100);
+      if (bar) {
+        bar.style.width = pct + '%';
+      }
+      if (label) {
+        var mb = (data.loaded / 1048576).toFixed(1);
+        var totalMb = (data.total / 1048576).toFixed(1);
+        label.textContent = mb + ' / ' + totalMb + ' MB';
+      }
+    } else if (data.status === 'initiate' && label) {
+      label.textContent = 'Loading model\u2026';
+      if (bar) bar.style.width = '0%';
+    }
+  }
+
+  function hideLoadingProgress() {
+    var container = document.getElementById('narratorLoading');
+    if (container) container.style.display = 'none';
   }
 
   // ---------------------------------------------------------------------------
@@ -857,6 +1091,28 @@
     preview.style.display = 'none';
     panel.appendChild(preview);
 
+    // --- Loading progress (hidden by default, shown during model download) ---
+    var loading = document.createElement('div');
+    loading.className = 'narrator-loading';
+    loading.id = 'narratorLoading';
+    loading.style.display = 'none';
+
+    var loadingLabel = document.createElement('span');
+    loadingLabel.className = 'narrator-loading-label';
+    loadingLabel.id = 'narratorLoadingLabel';
+    loadingLabel.textContent = 'Loading model\u2026';
+    loading.appendChild(loadingLabel);
+
+    var loadingTrack = document.createElement('div');
+    loadingTrack.className = 'narrator-loading-track';
+    var loadingBar = document.createElement('div');
+    loadingBar.className = 'narrator-loading-bar';
+    loadingBar.id = 'narratorLoadingBar';
+    loadingTrack.appendChild(loadingBar);
+    loading.appendChild(loadingTrack);
+
+    panel.appendChild(loading);
+
     // --- Narrate button ---
     var btn = document.createElement('button');
     btn.className = 'narrator-btn';
@@ -916,6 +1172,8 @@
       var active = wrapper.classList.toggle('expanded');
       panel.classList.toggle('visible', active);
       toggleBtn.classList.toggle('active', active);
+      // Lazy-init: start loading the TTS model when panel is first opened
+      if (active) ensureKokoroWorker();
     });
 
     // Body container for panel (animated open/close)
