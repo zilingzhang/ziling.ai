@@ -1,0 +1,349 @@
+/* ==========================================================================
+   Blendshape Debug Panel
+   Compact avatar-only view by default; expandable to show ARKit 52 metrics.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Panel container — compact by default, shows only avatar head
+   -------------------------------------------------------------------------- */
+.bs-debug-panel {
+  width: 280px;
+  overflow: hidden;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.3) 100%);
+  backdrop-filter: blur(16px) saturate(200%);
+  -webkit-backdrop-filter: blur(16px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 16px;
+  padding: 10px 12px 8px;
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 0.6rem;
+  color: #2c2c2c;
+  display: none;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  transition: width 0.3s ease;
+}
+
+.bs-debug-panel.visible {
+  display: block;
+}
+
+/* Expanded state — full width for metrics grid */
+.bs-debug-panel.bs-debug-expanded {
+  width: 520px;
+}
+
+/* --------------------------------------------------------------------------
+   Header
+   -------------------------------------------------------------------------- */
+.bs-debug-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.bs-debug-title {
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.45);
+  flex: 1;
+}
+
+.bs-debug-fps {
+  font-size: 0.6rem;
+  color: rgba(0, 0, 0, 0.35);
+}
+
+/* --------------------------------------------------------------------------
+   Metrics toggle (chevron button in header)
+   -------------------------------------------------------------------------- */
+.bs-metrics-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  margin: 0;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.35);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.bs-metrics-toggle svg {
+  transition: transform 0.3s ease;
+}
+
+.bs-metrics-toggle:hover {
+  background: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.bs-metrics-toggle.active {
+  background: rgba(46, 204, 113, 0.15);
+  border-color: rgba(46, 204, 113, 0.3);
+  color: #1a7a42;
+}
+
+.bs-metrics-toggle.active svg {
+  transform: rotate(180deg);
+}
+
+/* --------------------------------------------------------------------------
+   3D Preview canvas wrapper + canvas
+   -------------------------------------------------------------------------- */
+.bs-debug-preview-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.04);
+  margin-bottom: 6px;
+}
+
+.bs-debug-preview-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.bs-debug-preview-canvas.loaded {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Style chooser strip
+   -------------------------------------------------------------------------- */
+.bs-style-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px 0 6px;
+  justify-content: center;
+}
+
+.bs-style-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: var(--dot-color);
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.45;
+  transition: all 0.2s ease;
+  box-shadow: none;
+  flex-shrink: 0;
+}
+
+.bs-style-dot:hover {
+  opacity: 0.8;
+  transform: scale(1.15);
+}
+
+.bs-style-dot.active {
+  opacity: 1;
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 6px var(--dot-color);
+  transform: scale(1.2);
+}
+
+/* --------------------------------------------------------------------------
+   Rows container — collapsed by default, hidden
+   -------------------------------------------------------------------------- */
+#bsDebugRows {
+  overflow: hidden;
+  max-height: 600px;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+#bsDebugRows.bs-debug-rows-collapsed {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   Category label
+   -------------------------------------------------------------------------- */
+.bs-cat-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(0, 0, 0, 0.35);
+  padding: 4px 0 2px;
+  margin-top: 2px;
+}
+
+.bs-cat-label:first-child {
+  margin-top: 0;
+}
+
+.bs-cat-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   4-column grid
+   -------------------------------------------------------------------------- */
+.bs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px 4px;
+}
+
+/* --------------------------------------------------------------------------
+   Individual cell
+   -------------------------------------------------------------------------- */
+.bs-cell {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 14px;
+  opacity: 0.3;
+  transition: opacity 0.15s ease;
+}
+
+.bs-cell.bs-cell-active {
+  opacity: 1;
+}
+
+.bs-cell-label {
+  flex: 0 0 48px;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 0.5rem;
+}
+
+.bs-cell-track {
+  flex: 1;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.bs-cell-bar {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 33ms linear;
+  min-width: 0;
+}
+
+.bs-cell-val {
+  flex: 0 0 20px;
+  text-align: right;
+  font-size: 0.45rem;
+  color: rgba(0, 0, 0, 0.25);
+  font-variant-numeric: tabular-nums;
+}
+
+.bs-cell.bs-cell-active .bs-cell-val {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* --------------------------------------------------------------------------
+   Toggle button (main panel toggle in button group)
+   -------------------------------------------------------------------------- */
+.bs-debug-toggle {
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.25) 100%);
+  backdrop-filter: blur(16px) saturate(200%);
+  -webkit-backdrop-filter: blur(16px) saturate(200%);
+  color: #2c2c2c;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  /* Always visible */
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bs-debug-toggle:hover {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.35) 100%);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.bs-debug-toggle.active {
+  background: linear-gradient(135deg,
+    rgba(46, 204, 113, 0.3) 0%,
+    rgba(46, 204, 113, 0.15) 100%);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #1a7a42;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .bs-debug-panel {
+    width: 240px;
+  }
+
+  .bs-debug-panel.bs-debug-expanded {
+    width: 400px;
+  }
+
+  .bs-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .bs-cell-label { flex: 0 0 44px; font-size: 0.45rem; }
+  .bs-cell-val { flex: 0 0 18px; font-size: 0.4rem; }
+}
+
+@media (max-width: 480px) {
+  .bs-debug-panel {
+    width: 200px;
+    padding: 8px 10px 6px;
+  }
+
+  .bs-debug-panel.bs-debug-expanded {
+    width: calc(100vw - 2rem);
+  }
+
+  .bs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bs-cell-label { flex: 0 0 44px; font-size: 0.45rem; }
+  .bs-cell-val { flex: 0 0 16px; font-size: 0.4rem; }
+}

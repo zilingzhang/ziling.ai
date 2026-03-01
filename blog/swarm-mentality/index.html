@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Swarm Mentality</title>
+  <link rel="stylesheet" href="liquid-glass-slides.css?v=6">
+  <link rel="stylesheet" href="../read-aloud.css?v=3">
+  <link rel="stylesheet" href="../avatar/blendshape-debug.css?v=4">
+  <link rel="stylesheet" href="narrator.css?v=1">
+</head>
+
+<body data-default-voice="af_heart">
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       ACT I : THE LONG ROAD — History of AI
+       ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- Title — Sketching Desk -->
+  <section class="slide slide--desk" data-no-num>
+    <div class="desk-sketch"><img src="images/slide-01-gathering-storm-sketch.png"
+        alt="The Gathering Storm — color pencil sketch"></div>
+    <div class="slide-portrait" style="top:50%; left:7%; width:13%;"><img src="images/ziling_color_pencil.png"
+        alt="Ziling Zhang — color pencil portrait"></div>
+    <div
+      style="position:absolute; bottom:8%; left:7%; right:7%; display:flex; justify-content:space-between; align-items:stretch; gap:2cqi; z-index:3;">
+      <div class="glass-panel glass-panel--title"
+        style="position:relative; bottom:auto; left:auto; display:flex; align-items:center;">Swarm Mentality</div>
+      <div class="glass-panel glass-panel--subtitle"
+        style="position:relative; bottom:auto; right:auto; display:flex; align-items:center;">How a Data Scientist
+        Learned to<br>Stop Worrying and Love the Swarm</div>
+    </div>
+    <a class="glass-link" style="top:8%; right:4%;" href="https://expanse.fandom.com/wiki/Gathering_Storm"
+      target="_blank">+ The Gathering Storm, Laconian Pulsar-class fast-attack destroyer, The Expanse, vol 7</a>
+  </section>
+
+  <!-- TLDR Overview — The Journey at a Glance -->
+  <section id="overview" class="slide slide--desk" data-no-num>
+    <div class="tldr-strip">
+
+      <a class="tldr-panel" href="#act-i">
+        <div class="tldr-panel__label accent-crimson">Act I</div>
+        <div class="tldr-panel__thumb"><img src="images/slide-02-scaling-law-sketch.png" alt="The Scaling Law" style="object-position:right center;"></div>
+        <div class="tldr-panel__title">The Scaling Law</div>
+        <div class="tldr-panel__desc">From ImageNet to scaling laws: six decades of AI research and the compounding gains that made large language models possible.</div>
+      </a>
+
+      <a class="tldr-panel" href="#act-ii">
+        <div class="tldr-panel__label accent-purple">Act II</div>
+        <div class="tldr-panel__thumb"><img src="images/slide-06-paradigm-shift.png" alt="New Rules"></div>
+        <div class="tldr-panel__title">The New Rules</div>
+        <div class="tldr-panel__desc">How to work with AI that reasons. Prompt design, structured evaluation, and letting the model solve problems its own way.</div>
+      </a>
+
+      <a class="tldr-panel" href="#act-iii">
+        <div class="tldr-panel__label accent-pink">Act III</div>
+        <div class="tldr-panel__thumb"><img src="images/slide-12-scientist-terminal.png" alt="The Practice"></div>
+        <div class="tldr-panel__title">The Practice</div>
+        <div class="tldr-panel__desc">Human evaluation bottlenecks, multi-model code review, and the responsibility model for AI-assisted engineering.</div>
+      </a>
+
+      <a class="tldr-panel" href="#act-iv">
+        <div class="tldr-panel__label accent-orange">Act IV</div>
+        <div class="tldr-panel__thumb"><img src="images/slide-19-stakes-crossroads.png" alt="The Stakes"></div>
+        <div class="tldr-panel__title">The Stakes</div>
+        <div class="tldr-panel__desc">What AI means for the engineering profession: rising expectations, shifting skill sets, and the human judgment that still matters.</div>
+      </a>
+
+      <a class="tldr-panel" href="#act-v">
+        <div class="tldr-panel__label accent-gold">Epilogue</div>
+        <div class="tldr-panel__thumb"><img src="images/slide-24-compass-rose.png" alt="The Dream of Flight"></div>
+        <div class="tldr-panel__title">The Dream of Flight</div>
+        <div class="tldr-panel__desc">Leonardo da Vinci imagined humans taking flight. A reflection on aspiration, craft, and where this technology carries us next.</div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- Section Divider — The Scaling Law -->
+  <section id="act-i" class="slide slide--desk">
+    <div class="desk-sketch"><img src="images/slide-02-scaling-law-sketch.png"
+        alt="Scaling law log-log plot — color pencil sketch"></div>
+    <div class="glass-panel glass-panel--divider-title" style="left:20%;">The Scaling Law</div>
+    <div class="glass-panel glass-panel--divider-body" style="left:20%;">History of AI and the Long Road to the Swarm
+    </div>
+    <a class="glass-link" style="top:12%; right:12%;"
+      href="https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/" target="_blank">+ METR:
+      Measuring AI on Long Tasks</a>
+  </section>
+
+  <!-- xkcd Tasks — The Easy and the Virtually Impossible -->
+  <section class="slide" data-act="Act I" data-img="images/tasks.png"
+    data-alt="xkcd: GIS lookup is easy, recognizing a bird needs a research team and five years">
+    <div class="content-title">The Easy and the Virtually Impossible</div>
+    <div class="content-body content-body--with-illust">
+      <ul>
+        <li>xkcd #1425 (2014): "Check whether the photo is of a bird"</li>
+        <li>GIS lookup? <b>A few hours.</b></li>
+        <li>Bird recognition? <b>A research team and five years.</b></li>
+        <li>"In CS, it can be hard to explain the difference between the easy and the <b>virtually impossible</b>."</li>
+        <br>
+        <br>
+        <li>And yet, unbeknownst to xkcd, by 2012, someone had already cracked it...</li>
+      </ul>
+    </div>
+    <a class="glass-link" style="bottom:8%; left:4%;" href="https://en.wikipedia.org/wiki/Moravec%27s_paradox"
+      target="_blank">+ Moravec's paradox: What is simple for AI is hard for human, vice versa</a>
+    <a class="glass-link" style="bottom:4%; left:4%;" href="https://xkcd.com/1425/" target="_blank">+ xkcd 1425
+      "Tasks"</a>
+  </section>
+
+  <!-- The Worlds Fei-Fei Li Saw -->
+  <section class="slide" data-act="Act I" data-img="images/slide-03-fei-fei-li.png" data-alt="Fei-Fei Li with photographs and GPUs">
+    <div class="content-title">The Worlds Fei-Fei Li Saw</div>
+    <div class="content-body content-body--with-illust content-body--dense">
+      <ul>
+        <p>Fei-Fei Li: A Stanford professor curated 14 million hand-labeled images. <br><b>ImageNet</b> (2009). Large
+          Scale
+          Visual Recognition Challenge</p>
+        <br>
+        <p>Her book <i>The Worlds I See</i>, Chapter 8:</p>
+        <li>"For a stretch of seven days in early 2012, while <b>millions of GPUs</b> all over the world were running
+          hot to render jittering machine guns, charging hordes of zombies, and shrapnel-laced explosions, <b>two of
+            them, somewhere in Toronto</b>, were bringing a new kind of neural network to life."</li>
+        <br>
+        <li>Winner of the contest: <b>AlexNet (2012)</b></li>
+        <li>15.3% Error rate, 10.8% better than runner-up</li>
+      </ul>
+      <div class="portrait-row">
+        <figure class="portrait-row__item">
+          <img src="images/alex_color_pencil.png" alt="Alex Krizhevsky — color pencil portrait">
+          <figcaption class="portrait-row__label">Alex Krizhevsky</figcaption>
+        </figure>
+        <figure class="portrait-row__item">
+          <img src="images/ilya_color_pencil.png" alt="Ilya Sutskever — color pencil portrait">
+          <figcaption class="portrait-row__label">Ilya Sutskever</figcaption>
+        </figure>
+        <figure class="portrait-row__item">
+          <img src="images/hinton_color_pencil.png" alt="Geoffrey Hinton — color pencil portrait">
+          <figcaption class="portrait-row__label">Geoffrey Hinton</figcaption>
+        </figure>
+      </div>
+    </div>
+    <a class="glass-link" style="bottom:12%; right:4%;"
+      href="https://www.amazon.com/Worlds-See-Curiosity-Exploration-Discovery/dp/B0BSP29SQ4/" target="_blank">+ The
+      Worlds I see, Fei-fei Li, 2023</a>
+    <a class="glass-link" style="bottom:8%; right:4%;" href="https://en.wikipedia.org/wiki/AlexNet" target="_blank">+
+      AlexNet, 2012</a>
+  </section>
+
+  <!-- Vindication 25 Years in the Making -->
+  <section class="slide" data-act="Act I" data-img="images/slide-04-hinton-mountains.png" data-alt="Hinton traversing mountain range">
+    <div class="content-title">Vindication 25 Years in the Making</div>
+    <div class="content-body content-body--with-illust">
+      <div class="float-right--portrait">
+        <img src="images/lecun_color_pencil.png" alt="Yann LeCun — color pencil portrait">
+      </div>
+      <ul>
+        <li>Hinton: backpropagation pioneer (1986), mentor to Yann LeCun, "a near outcast among his colleagues" for
+          refusing to give up on neural networks</li>
+        <li>AlexNet (2012) vs. LeCun's LeNet (1998): <br> "at the level of theory, astonishingly little had changed"
+          <ul>
+            <li>10x larger images, 2x larger convolution kernel</li>
+            <li>a few more layers, 1,000 categories instead of 10</li>
+          </ul>
+        </li>
+        <li>So what changed? <b>The hardware.</b> GPUs made training large networks practical for the first time.</li>
+        <li>"AlexNet was no mere contest entry. It was a moment of <b>vindication a quarter century in the making</b>."
+        </li>
+      </ul>
+    </div>
+    <a class="glass-link" style="bottom:16%; right:16%;" href="https://en.wikipedia.org/wiki/LeNet" target="_blank">+
+      LeNet, 1998</a>
+  </section>
+
+  <!-- A Blacksmith's Hammer Against Glowing Steel -->
+  <section class="slide" data-act="Act I" data-img="images/slide-04b-alexnet-training.png"
+    data-alt="Blacksmith hammer forging neural landscape">
+    <div class="content-title">1.4 Million Rounds</div>
+    <div class="content-body content-body--with-illust">
+      <ul>
+        <li>Two Nvidia GPUs, running in parallel, conducting round after round at maximum speed. Hours become days, and
+          days stretch into a week.</li>
+        <li>A <b>blacksmith's hammer against glowing steel</b>. One increment at a time, until near-invisible
+          perturbations become <b>mountains and valleys</b>, reaching out into a multithousand-dimensional hyperspace.
+        </li>
+        <li>A thousand Dalmatians accumulate here, a thousand laundry hampers there, a thousand marimbas somewhere
+          else... The algorithm hasn't merely 'seen' these things; <b>it's become them</b>.</li>
+        <li>This neural network, the largest our field has ever seen, trained by more data than any in history, <b>can
+            generalize</b>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- The Triumph of Connectionism -->
+  <section class="slide" data-act="Act I" data-img="images/slide-05-shadow-clones.png" data-alt="Shadow clones in solution space">
+    <div class="content-title">The Triumph of Connectionism</div>
+    <div class="content-body content-body--with-illust">
+      <div class="float-right--portrait">
+        <img src="images/hinton_color_pencil.png" alt="Geoffrey Hinton — color pencil portrait">
+      </div>
+      <ul>
+        <li>Hinton's lifelong bet: intelligence emerges from <b>billions of tiny connections</b>, not hand-coded rules
+        </li>
+        <li>Hinton mentioned his 1985 tiny language model: turn words into feature vectors, let features interact
+          to <b>predict the next word</b>, back-propagate errors &mdash; the ancestor of every LLM today</li>
+        <br>
+        <li>What LLM AI system looks like: <b>1,000 shadow copies of intelligence</b> traversing solution space
+          simultaneously</li>
+        <li>Like <b>Naruto's Shadow Clone Jutsu</b>: each copy is fragile, fades quickly, but the swarm explores every
+          path at once</li>
+      </ul>
+    </div>
+    <a class="glass-link" style="bottom:8%; right:12%;" href="https://www.youtube.com/watch?v=IkdziSLYzHw"
+      target="_blank">+ Hinton @ Royal Institution</a>
+    <a class="glass-link" style="bottom:4%; right:12%;"
+      href="https://www.iro.umontreal.ca/~vincentp/ift3395/lectures/backprop_old.pdf" target="_blank">+ Hinton et al.,
+      Learning representations by back-propagating errors, 1986</a>
+  </section>
+
+  <!-- The Network Effect of Data -->
+  <section class="slide" data-act="Act I" data-img="images/slide-06b-network-effect.png"
+    data-alt="Interconnected waves of technology forming a network">
+    <div class="content-title">The Network Effect of Data</div>
+    <div class="content-body content-body--with-illust content-body--dense">
+      <ul>
+        <li>Each wave of technology looks like a big bang in isolation. But they <b>feed each other</b>.</li>
+        <li>Personal Computing created digital users. The Internet connected them. Mobile put a <b>camera in every
+            pocket</b>. CUDA unlocked <b>massively parallel compute</b>. ImageNet gave us the <b>labeled data</b>.
+          AlexNet proved AI <b>can see</b>. AlphaGo proved it <b>can reason</b>. Then Transformer proved it <b>can
+            create</b>.</li>
+        <li>Networked humanity<b> bootstraps the evolution of the silicon intelligence</b>, they learned from the
+          collective utterance and experience from billions of minds.</li>
+      </ul>
+      <div class="icon-grid icon-grid--primary">
+        <figure class="icon-grid__item">
+          <img class="icon-grid__img" src="images/network-pc.png" alt="Personal Computing 1980s">
+          <figcaption class="icon-grid__label">PC (1980s)</figcaption>
+        </figure>
+        <figure class="icon-grid__item">
+          <img class="icon-grid__img" src="images/network-internet.png" alt="Internet 1990s">
+          <figcaption class="icon-grid__label">Internet (1990s)</figcaption>
+        </figure>
+        <figure class="icon-grid__item">
+          <img class="icon-grid__img" src="images/network-iphone.png" alt="iPhone Camera 2007">
+          <figcaption class="icon-grid__label">iPhone (2007)</figcaption>
+        </figure>
+        <figure class="icon-grid__item">
+          <img class="icon-grid__img" src="images/network-cuda.png" alt="CUDA 1.0 GPU Computing 2007">
+          <figcaption class="icon-grid__label">CUDA 1.0 (2007)</figcaption>
+        </figure>
+      </div>
+      <div class="icon-grid icon-grid--secondary">
+        <figure class="icon-grid__item">
+          <img class="icon-grid__img" src="images/network-imagenet.png" alt="ImageNet 2009">
+          <figcaption class="icon-grid__label">ImageNet (2009)</figcaption>
+        </figure>
+        <figure class="icon-grid__item">
+          <img class="icon-grid__img" src="images/network-alexnet.png" alt="AlexNet Deep Learning 2012">
+          <figcaption class="icon-grid__label">AlexNet (2012)</figcaption>
+        </figure>
+        <figure class="icon-grid__item">
+          <img class="icon-grid__img" src="images/network-alphago.png" alt="AlphaGo 2016">
+          <figcaption class="icon-grid__label">AlphaGo (2016)</figcaption>
+        </figure>
+        <figure class="icon-grid__item">
+          <img class="icon-grid__img" src="images/network-transformer.png" alt="Attention Is All You Need 2017">
+          <figcaption class="icon-grid__label">Transformer (2017)</figcaption>
+        </figure>
+      </div>
+    </div>
+    <!-- Net Smart — Howard Rheingold, Chinese ed. Ziling Zhang et al. -->
+    <a class="slide-portrait" style="bottom:2%; right:26%; top:auto; left:auto; width:10%;"
+      href="https://mitpress.mit.edu/9780262300728/net-smart/" target="_blank">
+      <img src="images/net-smart-cover-original.jpg"
+        alt="Net Smart: How to Thrive Online — Howard Rheingold (MIT Press, 2012)">
+      <div
+        style="padding:0.3cqi 0.2cqi; text-align:left; font-size:clamp(0.3rem,0.7cqi,11px); line-height:1.3; color:#2c2c3a;">
+        <div style="opacity:0.7;">MIT Press<br>Chinese ed. Ziling Zhang et al.</div>
+      </div>
+    </a>
+  </section>
+
+  <!-- The Bitter Lesson -->
+  <section class="slide" data-act="Act I" data-img="images/slide-07-bitter-lesson.png" data-alt="Chess board brute compute">
+    <div class="content-title">The Bitter Lesson (2019)</div>
+    <div class="content-body content-body--with-illust content-body--dense">
+      <ul>
+        <li>Rich Sutton - Father of Reinforcement Learning</li>
+        <br>
+        <li>The biggest lesson that can be read from 70 years of AI research is that general methods that leverage
+          computation (search and learning) are ultimately the most effective, and by a large margin.</li>
+        <br>
+        <div class="icon-grid icon-grid--primary">
+          <figure class="icon-grid__item icon-grid__item--equal">
+            <img class="icon-grid__img icon-grid__img--full" src="images/bitter-chess-1997.png" alt="Chess — Deep Blue vs Kasparov 1997">
+            <figcaption class="icon-grid__label">Chess (1997)</figcaption>
+          </figure>
+          <figure class="icon-grid__item icon-grid__item--equal">
+            <img class="icon-grid__img icon-grid__img--full" src="images/bitter-cv-2012.png" alt="Computer Vision — AlexNet 2012">
+            <figcaption class="icon-grid__label">Vision (2012)</figcaption>
+          </figure>
+          <figure class="icon-grid__item icon-grid__item--equal">
+            <img class="icon-grid__img icon-grid__img--full" src="images/bitter-go-2016.png" alt="Game of Go — AlphaGo vs Lee Sedol 2016">
+            <figcaption class="icon-grid__label">Go (2016)</figcaption>
+          </figure>
+          <figure class="icon-grid__item icon-grid__item--equal">
+            <img class="icon-grid__img icon-grid__img--full" src="images/bitter-nlp-2017.png" alt="NLP — Transformer / Attention Is All You Need 2017">
+            <figcaption class="icon-grid__label">NLP (2017)</figcaption>
+          </figure>
+        </div>
+        <br>
+        <li>We want AI agents that can discover like we can, not which contain what we have discovered. Building in our
+          discoveries only makes it harder to see how the discovering process can be done.</li>
+      </ul>
+    </div>
+    <a class="glass-link" style="bottom:24%; right:12%;"
+      href="http://www.incompleteideas.net/IncIdeas/BitterLesson.html" target="_blank">+ The Bitter Lesson (essay)</a>
+    <a class="glass-link" style="bottom:20%; right:12%;" href="https://www.youtube.com/watch?v=21EYKqUsPfg"
+      target="_blank">+ Sutton on Dwarkesh Patel</a>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       ACT II : The NEW RULES — The Paradigm Shift
+       ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- Section Divider — The New Rules -->
+  <section id="act-ii" class="slide slide--desk">
+    <div class="desk-sketch"><img src="images/slide-06-paradigm-shift.png" alt="Rulebook swept by neural network wind">
+    </div>
+    <div class="glass-panel glass-panel--divider-title">The New Rules</div>
+    <div class="glass-panel glass-panel--divider-body">What comes after the Bitter Lesson</div>
+  </section>
+
+  <!-- Unhobble the Model -->
+  <section class="slide" data-act="Act II" data-img="images/slide-08-unhobble-model.png" data-alt="Bird outgrowing cage">
+    <div class="content-title">Unhobble the Model</div>
+    <div class="content-body content-body--with-illust">
+      <ul>
+        <li>Model capability is <b>doubling every 7 months</b>. <br>You need to recalibrate every 3 months what the
+          latest
+          model can do.</li>
+        <br>
+        <li>Don't over-steer. Don't guardrail heavily. <br>Give the model <b>breathing room to innovate</b>.
+          <ul>
+            <li>Heavy scaffolding and rigid prompt engineering fight against the scaling law</li>
+            <li>What you hand-tuned for last month's model may hobble next month's</li>
+          </ul>
+        </li>
+        <br>
+        <li>It's just a while loop</li>
+      </ul>
+    </div>
+    <a class="glass-link" style="bottom:20%; right:12%;" href="https://youtu.be/XuvKFsktX0Q?si=_4HEwBFV3IVrnsJl&t=305"
+      target="_blank">+ Anthropic: Building Agents with Claude</a>
+  </section>
+
+  <!-- Reverse Elicitation > Prompt Engineering -->
+  <section class="slide" data-act="Act II" data-img="images/slide-09-deep-thought.png" data-alt="Deep Thought computer with 42">
+    <div class="content-title">Reverse Elicitation &gt; Prompt Engineering</div>
+    <div class="content-body content-body--with-illust">
+      <ul>
+        <li>An advanced civilization built the Deep Thought computer to ask, What is the Answer to Life, Universe and
+          Everything? It returns <b>42</b>. Nobody understood -- they never knew the real <b>question</b>. So Deep
+          Thought built <b>Earth</b> -- a biological computer -- to figure out what the question actually was.</li>
+        <br>
+        <li>A smart agent works the same way: it infers from your prompt, then reaches into the world -- asks clarifying
+          questions, searches docs, reads between the lines</li>
+        <li>Your prompt can be <b>imperfect, preliminary</b>. You can't plan everything ahead. <i>Don't Panic</i>,
+          partner with your agent, iterate.</li>
+      </ul>
+    </div>
+    <a class="glass-link" style="bottom:16%; right:12%;"
+      href="https://en.wikipedia.org/wiki/The_Hitchhiker%27s_Guide_to_the_Galaxy_(novel)" target="_blank">+ The
+      Hitchhiker's Guide to the Galaxy (Novel)</a>
+    <a class="glass-link" style="bottom:12%; right:12%;"
+      href="https://en.wikipedia.org/wiki/The_Hitchhiker%27s_Guide_to_the_Galaxy_(film)" target="_blank">+ The
+      Hitchhiker's Guide to the Galaxy (Movie)</a>
+
+
+  </section>
+
+  <!-- The 4D Framework -->
+  <section class="slide" data-act="Act II" data-img="images/slide-11-4d-framework.png" data-alt="4D Framework compass quadrants">
+    <div class="content-title">Anthropic's 4D Framework of AI Fluency</div>
+    <div class="content-body content-body--with-illust">
+      <table class="framework-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Principle</th>
+            <th>In Practice</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b class="accent-crimson">Delegation</b></td>
+            <td>Deciding whether, when and how to engage with AI</td>
+            <td>Feature dev, <br>Multi-clauding git worktrees</td>
+          </tr>
+          <tr>
+            <td><b class="accent-purple">Description</b></td>
+            <td>Describing goals to prompt useful AI behaviors</td>
+            <td>CLAUDE.md, Plan mode, MCP</td>
+          </tr>
+          <tr>
+            <td><b class="accent-pink">Discernment</b></td>
+            <td>Accurately assessing usefulness of AI outputs</td>
+            <td>Spidey sense for hallucination</td>
+          </tr>
+          <tr>
+            <td><b class="accent-orange">Diligence</b></td>
+            <td>Taking responsibility for what we do with AI</td>
+            <td>CI, sandbox, GitHub hooks</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td><b class="accent-gold">Free Courses</b></td>
+            <td><a class="glass-link"
+                style="position:relative; font-size:clamp(.6rem,1.3cqi,22px); padding:.6cqi 1.3cqi; background:rgba(217,119,87,.18); color:#b8553a; border:1px solid rgba(217,119,87,.3);"
+                href="https://youtube.com/playlist?list=PLf2m23nhTg1NjL3-jL3s0qZCYzO07ZQPv" target="_blank">+ AI Fluency
+                Course</a></td>
+            <td><a class="glass-link"
+                style="position:relative; font-size:clamp(.6rem,1.3cqi,22px); padding:.6cqi 1.3cqi; font-style:normal; background:rgba(217,119,87,.18); color:#b8553a; border:1px solid rgba(217,119,87,.3);"
+                href="https://www.deeplearning.ai/short-courses/claude-code-a-highly-agentic-coding-assistant/"
+                target="_blank">+ Claude Code Course</a></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <a class="glass-link"
+      style="bottom:8%; right:5%; font-size:clamp(.6rem,1.3cqi,22px); padding:.6cqi 1.3cqi; background:rgba(217,119,87,.18); color:#b8553a; border:1px solid rgba(217,119,87,.3);"
+      href="https://code.claude.com/docs/en/best-practices" target="_blank">+ Best Practices</a>
+    <!-- Claude Super Bowl ad — color pencil sketch, bottom-right -->
+    <div class="overlay-panel" style="bottom:2%; right:20%; width:20%;">
+      <img src="images/slide-11-claude-superbowl.png" alt="Claude Super Bowl ad — color pencil sketch">
+    </div>
+    <a class="glass-link" style="bottom:16%; right:5%;" href="https://www.youtube.com/watch?v=De-_wQpKw0s"
+      target="_blank">+ Claude Super Bowl Ad</a>
+  </section>
+
+  <!-- Good Old Software Engineering -->
+  <section class="slide" data-act="Act II" data-img="images/slide-13-agent-tools.png" data-alt="Agent with many tool arms">
+    <div class="content-title">Agent: Good Old Software Engineering Matters More Now</div>
+    <div class="content-body content-body--with-illust">
+      <ul>
+        <li>In the agent era, claude code <b>touches the physical world</b> and runs in <b>self-iterating loops</b>.
+        <li>Human need a lot of tools to finish the job too,
+          <ul>
+            <li>Humans can't multiply large numbers in their heads &mdash; <b>so we use calculators</b></li>
+            <li>Humans can't picture what a website looks like from CSS/HTML &mdash; <b>a browser renders it exactly</b>
+            </li>
+            <li>Humans can't guess how fast C++ runs &mdash; <br><b>a profiler measures it scientifically</b></li>
+          </ul>
+        </li>
+        <li>Give agents what humans always had: symbolic computation, validators, linters, compilers, unit-test
+          environments, web search, GPUs, robot arms, and sensors. Stand on giants, don't spend tokens rebuilding
+          centuries of human effort.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Vibe Coding — Karpathy -->
+  <section class="slide" data-act="Act II" data-img="images/slide-14-vibe-coding-karpathy.png"
+    data-alt="Person leaning back, voice-dictating, code streaming past">
+    <div class="content-title">Vibe Coding</div>
+    <div class="content-body content-body--with-illust">
+      <div class="float-right--portrait">
+        <img src="images/karpathy_color_pencil.png" alt="Andrej Karpathy — color pencil portrait">
+      </div>
+      <ul>
+        <p>Andrej Karpathy (@karpathy), Feb 2, 2025:</p>
+        <li>"There's a new kind of coding I call <b>vibe coding</b>, where you fully give in to the vibes, <b>embrace
+            exponentials, and forget that the code even exists.</b>"</li>
+        <li>"I 'Accept All' always, I don't read the diffs anymore."</li>
+        <li>"When I get error messages I just copy paste them in with no comment, usually that fixes it."</li>
+        <li>"The code grows beyond my usual comprehension... Sometimes the LLMs can't fix a bug so I just work around it
+          or ask for random changes until it goes away."</li>
+        <li>"It's not too bad for <b>throwaway weekend projects</b>, but still quite amusing."</li>
+      </ul>
+    </div>
+    <a class="glass-link" style="bottom:8%; right:12%;" href="https://x.com/karpathy/status/1886192184808149383"
+      target="_blank">+ Vibe Coding @karpathy x.com</a>
+  </section>
+
+  <!-- Responsible Vibe Coding in Production -->
+  <section class="slide" data-act="Act II" data-img="images/slide-14-tree-vibe-coding.png"
+    data-alt="Tree with stable trunk and wild leaves">
+    <div class="content-title">Responsible Vibe Coding in Production</div>
+    <div class="content-body content-body--with-illust">
+      <div class="float-right--portrait">
+        <img src="images/schluntz_color_pencil.png" alt="Erik Schluntz — color pencil portrait">
+      </div>
+      <ul>
+        <li>Erik Schluntz, Member of Technical Staff at @anthropic-ai</li>
+        <li>You forget the code exists, but not the product exists!</li>
+        <li>The tree metaphor:
+          <ul>
+            <li><b>Branch and stem nodes stay fixed</b> &mdash; tested, stable APIs and data contracts</li>
+            <li><b>Iterate crazily on leaf nodes</b> &mdash; UI, prompts, config, experiments</li>
+          </ul>
+        </li>
+        <li>As leaf nodes stabilize, they <b>grow into new stem</b></li>
+        <li>Never vibe code your core infrastructure</li>
+        <li>Always vibe code your experiments</li>
+        <li>The tree grows outward. Stability propagates inward.</li>
+      </ul>
+    </div>
+    <a class="glass-link" style="bottom:8%; right:12%;" href="https://www.youtube.com/watch?v=fHWFF_pnqDk"
+      target="_blank">+ Anthropic: Vibe Coding in Prod</a>
+  </section>
+
+  <!-- Ask Not What Claude Can Do For You -->
+  <section class="slide" data-act="Act II" data-img="images/slide-10-kennedy.png" data-alt="JFK color pencil illustration">
+    <div class="content-title">Ask Not What Claude Can Do For You</div>
+    <div class="content-body content-body--with-illust">
+      <div class="float-right--portrait">
+        <img src="images/schluntz_color_pencil.png" alt="Schluntz — color pencil portrait">
+      </div>
+      <ul>
+        <li>"Ask what you can do for Claude"</li>
+        <li>Do our agents have what they need to succeed?
+          <ul>
+            <li>Can it read our doc easily?</li>
+            <li>Are there tribal knowledge locked in people's heads?</li>
+            <li>Why are we doing things so differently vs opensource / big tech?</li>
+            <li>Do we have clean, idiomatic code?</li>
+          </ul>
+        </li>
+        <br>
+        <li>"You point the thing around and it shoots pellets or sometimes even misfires and then once in a while when
+          you <b>hold it just right</b> a powerful beam of laser erupts and melts your problem."</li>
+      </ul>
+    </div>
+    <a class="glass-link" style="bottom:8%; right:12%;" href="https://www.youtube.com/watch?v=fHWFF_pnqDk"
+      target="_blank">+ Anthropic: Vibe Coding in Prod</a>
+  </section>
+
+  <!-- Compound Engineering — Every Inc -->
+  <section class="slide" data-act="Act II" data-img="images/slide-14c-compound-engineering.png"
+    data-alt="Compounding loop spiral rising upward">
+    <div class="content-title">Compound Engineering</div>
+    <div class="content-body content-body--with-illust">
+      <div class="float-right--portrait">
+        <img src="images/shipper_color_pencil.png" alt="Dan Shipper — color pencil portrait">
+      </div>
+      <ul>
+        <p>Dan Shipper (Every Inc): "Each unit of engineering work should make subsequent units easier — not
+          harder."</p>
+        <li>Traditional development accumulates technical debt. Every feature adds complexity. The codebase becomes
+          harder to work with over time.</li>
+        <li><b>Compound engineering inverts this.</b> 80% is in planning and review, 20% is in execution:
+          <ul>
+            <li><b>Plan</b> thoroughly before writing code</li>
+            <li><b>Review</b> to catch issues and capture learnings</li>
+            <li><b>Codify</b> knowledge so it's reusable</li>
+            <li>Keep <b>quality</b> high so future changes are easy</li>
+          </ul>
+        </li>
+      </ul>
+      <p><b class="accent-crimson">TLDR: Use Plan Mode interactively. Document. Refactor aggressively. ABSOLUTELY NO
+          QUICK AND DIRTY.</b></p>
+    </div>
+    <a class="glass-link" style="bottom:12%; right:12%;" href="https://www.youtube.com/watch?v=kjVNYUnM-_0"
+      target="_blank">+ Compound Engineering (Every)</a>
+    <a class="glass-link" style="bottom:8%; right:12%;"
+      href="https://github.com/EveryInc/compound-engineering-plugin#philosophy" target="_blank">+ Claude Code compound
+      engineering plugin</a>
+  </section>
+
+  <!-- Context Is a Precious Resource -->
+  <section class="slide" data-act="Act II" data-img="images/slide-15-context-rot.png" data-alt="Cluttered desk with fading documents">
+    <div class="content-title">Context Is a Precious Resource</div>
+    <div class="content-body content-body--with-illust--dense" style="width:60%;">
+      <ul>
+        <li>Attention is <b class="accent-crimson">O(n&sup2;)</b> in memory: tokens interconnect in 2D. Double the
+          context, quadruple the cost.</li>
+        <li>NVIDIA's <b>RULER</b> research: as context fills up, model accuracy <b>degrades measurably</b>.
+          Retrieval accuracy drops. Reasoning gets noisier. The model "forgets" early instructions.</li>
+        <li>Think of it as a <b>cluttered desk</b>: pile on more papers and it gets harder to find the one you need. The
+          desk doesn't grow, your focus scatters.</li>
+        <li><b>Context Rot / Dumb Zone / Context Poison</b></li>
+        <li>Codex creator, left OpenAI: I /compact at 50%</li>
+        <li><b>Random Canary</b>: Add random fact (I drank tea 8am in the morning as needle), poke model to see it still
+          remember</li>
+      </ul>
+    </div>
+    <a class="glass-link" style="bottom:12%; right:12%;" href="https://github.com/NVIDIA/RULER" target="_blank">+ Nvidia
+      RULER Research</a>
+    <a class="glass-link" style="bottom:8%; right:12%;" href="https://youtu.be/qwmmWzPnhog?si=8lUhEsP9PYbgJXw8&t=749"
+      target="_blank">+ YCombinator: We're All Addicted To Claude Code</a>
+    <a class="glass-link" style="bottom:4%; right:12%;" href="https://www.youtube.com/watch?v=aqW68Is_Kj4"
+      target="_blank">+ Anthropic: Evolving Claude APIs for Agents (Context Pillar)</a>
+  </section>
+
+  <!-- Delegate to Beat Context Rot -->
+  <section class="slide" data-act="Act II" data-img="images/slide-16-delegate-subagents.png"
+    data-alt="Minions and precog agents dispatching tasks">
+    <div class="content-title">Delegate to Beat Context Rot</div>
+    <div class="content-body content-body--with-illust" style="width:70%;">
+      <ul>
+        <li>The most powerful antidote: <b>don't stuff everything into one context</b>. Delegate like human.</li>
+        <li><b>Subagents</b> (spoke): like <b>Despicable Me minions</b>
+          <ul>
+            <li>Dispatch a minion with a clean, tiny context</li>
+            <li>It does one job, reports back, and disappears</li>
+            <li>Your main context stays uncluttered</li>
+          </ul>
+        </li>
+        <li><b>Agent teams</b> (swarm): like <b>Minority Report precogs</b>
+          <ul>
+            <li>Multiple agents work in parallel</li>
+            <li>They email and challenge each other as equals</li>
+            <li>The team scales horizontally</li>
+          </ul>
+        </li>
+        <li>Delegation is not just a context rot trick.</li>
+        <li>It is <b>how you scale intelligence</b>. Just like human.</li>
+      </ul>
+    </div>
+    <a class="glass-link" style="bottom:16%; right:20%;" href="https://code.claude.com/docs/en/sub-agents"
+      target="_blank">+ Claude Code: Sub-agents</a>
+    <a class="glass-link" style="bottom:16%; right:4%;" href="https://code.claude.com/docs/en/agent-teams"
+      target="_blank">+ Claude Code: Agent Teams</a>
+  </section>
+
+  <!-- Librarian vs Analyst — RAG vs Agent -->
+  <section class="slide" data-act="Act II">
+    <div class="content-title">Librarian vs Analyst: RAG vs Agent</div>
+    <!-- Two comic panels vertically stacked on right -->
+    <div class="comic-panels-container" style="position:absolute; top:10%; right:4%; width:20%;">
+      <!-- Librarian comic -->
+      <div class="comic-panel">
+        <div class="comic-panel__header comic-panel__header--purple">RAG Librarian</div>
+        <img class="comic-panel__image" src="images/kafka-library-comic.png"
+          alt="4-panel comic: asking for 3 Kafka books, librarian says aisle 7">
+        <div class="comic-panel__caption">"Aisle 7. Do you really want to read all three together?"</div>
+      </div>
+      <!-- Agent analyst comic -->
+      <div class="comic-panel">
+        <div class="comic-panel__header comic-panel__header--crimson">Agent Analyst</div>
+        <img class="comic-panel__image" src="images/grace-agent-workflow-comic.png"
+          alt="4-panel comic: Agent investigating codebase, grep search, reading code, explaining findings">
+        <div class="comic-panel__caption">"Here's what you need: src/core/kafka_parser.ts:247"</div>
+      </div>
+    </div>
+
+    <div class="content-body content-body--dense">
+      <table class="framework-table" style="margin-top:1.5cqi; width:80%;">
+        <thead>
+          <tr>
+            <th></th>
+            <th><b class="accent-purple">Librarian (RAG)</b></th>
+            <th><b class="accent-crimson">Analyst (Agent)</b></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Context Strategy</b></td>
+            <td>Pre-chunked, embedded docs; static similarity search</td>
+            <td>Progressive disclosure; dynamic exploration</td>
+          </tr>
+          <tr>
+            <td><b>Memory</b></td>
+            <td>Flat vector DB, all chunks equal weight</td>
+            <td>Hierarchical CLAUDE.md (global → workspace → project)</td>
+          </tr>
+          <tr>
+            <td><b>Search</b></td>
+            <td>Semantic similarity, k-nearest neighbors</td>
+            <td>Active grep/glob, multi-round code navigation</td>
+          </tr>
+          <tr>
+            <td><b>Quality</b></td>
+            <td>Less capable summarizer, cannot verify, stale doc need index refresh</td>
+            <td>Living docs, team can correct course</td>
+          </tr>
+          <tr>
+            <td><b>Core Difference</b></td>
+            <td>"It's in aisle 7" — can't investigate deeper</td>
+            <td>Pulls book off shelf, reads pages, cites line numbers</td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
+      <p>Claude Code abandoned RAG index before launch. <br>Continue.dev abandoned RAG index 2025.</p>
+
+    </div>
+    <img class="inline-portrait" style="bottom:4%; right:26%;" src="images/slide-07-sutton-portrait.png"
+      alt="Rich Sutton">
+    <a class="glass-link" style="bottom:8%; left:4%;" href="https://code.claude.com/docs/en/best-practices"
+      target="_blank">
+      + Claude Code: Context Management</a>
+    <a class="glass-link" style="bottom:4%; left:4%;" href="https://code.claude.com/docs/en/memory" target="_blank">
+      + Claude Code: CLAUDE.md Documentation</a>
+  </section>
+
+  <!-- From Workflow Graphs to Stateful Agents -->
+  <section class="slide" data-act="Act II" data-img="images/slide-17-agent-evolution.png"
+    data-alt="Evolution timeline: workflow graph to autonomous agent to stateful cached agent">
+    <img class="inline-portrait" style="top:2%; right:20%;" src="images/slide-07-sutton-portrait.png" alt="Rich Sutton">
+    <div class="content-title">From Workflow Graphs to Stateful Agents</div>
+    <div class="content-body content-body--with-illust content-body--dense">
+      <ul>
+        <li><b class="accent-purple">Early days (2024):</b> Human hand-crafted workflow graphs (LangFlow, LangGraph).
+          Fixed
+          execution paths, e.g. daily issue summarizer.</li>
+        <br>
+        <li><b class="accent-crimson">Autonomous agents (2025):</b> Claude Code (Feb 2025) lets agents decide
+          <b>when</b> to call tools vs. keep reasoning. Enterprise chatbots adopted this pattern rapidly. Claude Agent SDK
+          abstracted this layer away.
+        </li>
+        <br>
+        <li><b class="accent-gold">Stateful + cached (now):</b>
+          <ul>
+            <table class="pricing-table pricing-table--vertical">
+              <thead>
+                <tr>
+                  <th colspan="2">Opus 4.6 &mdash; per million tokens</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Base Input</td>
+                  <td class="bar-cell">
+                    <div class="bar" style="width:20%;background:var(--accent1);"></div><span>$5</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>5m Cache Write</td>
+                  <td class="bar-cell">
+                    <div class="bar" style="width:25%;background:var(--accent1);"></div><span>$6.25</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>1h Cache Write</td>
+                  <td class="bar-cell">
+                    <div class="bar" style="width:40%;background:var(--accent6);"></div><span>$10</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Cache Hit</td>
+                  <td class="bar-cell">
+                    <div class="bar bar--green" style="width:2%;min-width:6px;"></div><span><b>$0.50</b></span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Output</td>
+                  <td class="bar-cell">
+                    <div class="bar" style="width:100%;background:var(--accent6);"></div><span>$25</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <li><b>prompt caching saves 90%</b>. Cache persists on server 1h.</li>
+            <li>Caching multi-turn chat in RAM is cheaper vs. recomputing on HBM GPUs via stateless API</li>
+            <li>RAM prices quadrupled<br>Micron exited consumer RAM</li>
+            <li><b class="accent-crimson">Most chat UIs do not support prompt caching!<br>Use Claude Code or the API for
+                repetitious workflow!</b></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <!-- Prompt caching advocate — color pencil sketch, lower-right corner -->
+    <div class="overlay-panel" style="bottom:4%; right:28%; width:16%;">
+      <img src="images/slide-17-claude-superbowl-placeholder.png"
+        alt="Prompt caching advocate saying 'Take this free prompt caching course to save 90% on your bill immediately!' — color pencil sketch">
+    </div>
+    <a class="glass-link" style="bottom:16%; right:4%;"
+      href="https://github.com/anthropics/claude-code-sdk-python" target="_blank">+ Claude Agent
+      SDK</a>
+    <a class="glass-link glass-link--accent" style="bottom:12%; right:4%;"
+      href="https://www.deeplearning.ai/short-courses/building-towards-computer-use-with-anthropic/" target="_blank">+
+      DeepLearning.ai: Building Towards Computer Use</a>
+    <a class="glass-link" style="bottom:8%; right:4%;"
+      href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" target="_blank">+ Anthropic: Prompt
+      Caching</a>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       ACT III : The Practice — Engineering Discipline in the AI Age
+       ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- Section Divider — The Practice -->
+  <section id="act-iii" class="slide slide--desk">
+    <div class="desk-sketch"><img src="images/slide-12-scientist-terminal.png" alt="Scientist at terminal"></div>
+    <div class="glass-panel glass-panel--divider-title">The Practice</div>
+    <div class="glass-panel glass-panel--divider-body">Engineering Discipline in the AI Age</div>
+  </section>
+
+  <!-- The Human Bottleneck -->
+  <section class="slide" data-act="Act III" data-img="images/slide-18-human-bottleneck.png" data-alt="Funnel with engineer traffic jam">
+    <div class="content-title">The Human Eval Bottleneck</div>
+    <div class="content-body content-body--with-illust content-body">
+      <ul>
+        <li>A model that can one-shot 99% of the time worth 5 times the model that can one-shot 95%</li>
+        <li>Because we're optimizing for <b>human engineering time</b> There is no reason not to use Opus in high stake
+          tasks.</li>
+        <li>Every model failure that reaches / slips pass a human is expensive:
+          <ul>
+            <li>The human is now the slowest component in the loop. But we must be diligent to catch AI Slops!</li>
+            <li>How to QA at choke points better?</li>
+          </ul>
+        </li>
+        <li><b>Answer:</b> Design our tooling to <b>speed up human evaluation</b>. Craft telemetry. Don't dump a wall
+          of text, show green/red diffs that activate the human's biological vision neural network!</li>
+      </ul>
+    </div>
+    <a class="glass-link" style="bottom:12%; right:12%;" href="https://youtu.be/LCEmiRjPEtQ?si=DzWbDAnIK-F1d9R4&t=1105"
+      target="_blank">+ Software is changing again (Andrej Karpathy)</a>
+  </section>
+
+  <!-- Vibe Checking — Octoslashing Code Review -->
+  <section class="slide" data-act="Act III" data-img="images/octaslash.jpg"
+    data-alt="Eight swordsmen attacking a wooden post from all directions — Su Shi's octaslash">
+    <div class="content-title">Vibe Checking</div>
+    <div class="content-body content-body--with-illust content-body--dense">
+      <ul>
+        <p><i>"Attack the text from eight sides (when reading)."</i> &mdash; Su Shi (1037&ndash;1101)</p>
+        <li>Nvidia: 100% engineers use AI to generate code, 3x code volume vs before. Human review can't keep up.
+          They have to <b>Fight magic with magic.</b> Extra pairs of eyes are always welcomed.
+        </li>
+        <li><b class="accent-crimson">Official Claude Code <code>/code-review</code></b>: Spawn 4 parallel subagents of
+          hybrid models
+          attacks
+          a Merge
+          Request from every angle
+          <ul>
+            <li>Sonnet: CLAUDE.md compliance.</li>
+            <li>Opus: obvious bugs</li>
+            <li>Opus: security</li>
+            <li>Validation layer - <b><br>filter nitpicking, high signal only</b></li>
+          </ul>
+        </li>
+        <li><b class="accent-crimson">Official <code>/security-review</code></b></li>
+        <li><b>Deployed in CI/CD</b>: <br>First MR caught cookie regression + <br>insecure Docker config</li>
+      </ul>
+    </div>
+    <!-- Code review panel — centered bottom, above links -->
+    <div class="overlay-panel" style="bottom:0%; left:42%; width:26%;">
+      <img src="images/code-review.jpg"
+        alt="MR code review — Claude Code found cookie security regression and insecure Docker config">
+      <div style="font-size:clamp(0.35rem,0.8cqi,12px); margin-top:0.4cqi; opacity:0.7; font-style:italic;">
+        Real-world MR review -- cookie security regression + insecure Docker config</div>
+    </div>
+    <!-- Nvidia link on top of octaslash background -->
+    <a class="glass-link" style="top:30%; right:16%;" href="https://www.youtube.com/watch?v=Fo9jgL_x7hU"
+      target="_blank">+
+      Nvidia: Scaling Code Quality with AI</a>
+    <!-- Other links below -->
+    <!-- Internal MR link removed for personal publishing -->
+    <a class="glass-link" style="bottom:24%; right:12%;"
+      href="https://github.com/anthropics/claude-code/blob/main/plugins/code-review/commands/code-review.md"
+      target="_blank">+ /code-review plugin (Claude Code)</a>
+  </section>
+
+  <!-- The Responsibility Model -->
+  <section class="slide" data-act="Act III" data-img="images/slide-20-responsibility-model.png"
+    data-alt="Person standing behind transparent agent facing judge gavel">
+    <div class="content-title">The Responsibility Model</div>
+    <div class="content-body content-body--with-illust">
+      <ul>
+        <li>Your agent can't take responsibility. <b>You must.</b></li>
+        <li>Legal liability, field issues, SLA commitments, none of these transfer to your AI</li>
+        <li>You still own every mistake your agent makes
+          <ul>
+            <li>Deloitte fined for submitting hallucinated references in a government report</li>
+            <li>Papers retracted, reputation tarnished after citing hallucinated papers</li>
+          </ul>
+        </li>
+        <li>The bar of <b>quality</b> must be high with or without AI</li>
+        <li>AI makes you faster. It doesn't make you less accountable.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       ACT IV : THE STAKES — Future and Vision
+       ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- Section Divider — The Stakes -->
+  <section id="act-iv" class="slide slide--desk">
+    <div class="desk-sketch"><img src="images/slide-19-stakes-crossroads.png" alt="Crossroads city vs ruins"></div>
+    <div class="glass-panel glass-panel--divider-title">The Stakes</div>
+    <div class="glass-panel glass-panel--divider-body">Machines of Loving Grace<br>The Adolescence of Technology</div>
+  </section>
+
+  <!-- The Renaissance Engineer Debate -->
+  <section class="slide" data-act="Act IV" data-img="images/slide-21-renaissance-engineer.png" data-alt="Renaissance painter with laptop">
+    <div class="content-title">The "Renaissance Engineer"</div>
+    <div class="content-body content-body--with-illust">
+      <ul>
+        <p>AWS Reinvent:2025 CTO Werner Vogels: "You are the renaissance engineers with a new set of tools"</p>
+        <li>A comforting message. A <b>psychological massage</b>.</li>
+        <li>And then he retires.</li>
+        <li>And then AWS lay off another <b>16,000</b>.</li>
+        <li>The tool metaphor is incomplete
+          <ul>
+            <li>This is not a better hammer</li>
+            <li>AI already achieved super human performance in Go, SWE-bench,
+              Graduate Level Questions, <b>International Mathematic Olympiad</b></li>
+            <li>And scaling laws continue to hold.</li>
+            <li>We should be humbled and put down our pride, but what is left for us to do?</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <a class="glass-link" style="bottom:16%; right:12%;" href="https://www.youtube.com/watch?v=3Y1G9najGiI"
+      target="_blank">+ Vogels @ AWS re:Invent 2025</a>
+  </section>
+
+  <!-- Beginner's Mind -->
+  <section class="slide" data-act="Act IV" data-img="images/slide-beginners-mind.jpg"
+    data-alt="Child meditating under waterfall with Beginner's Mind thought bubble">
+    <div class="content-title">Beginner's Mind</div>
+    <div class="content-body content-body--with-illust content-body--dense">
+      <ul>
+        <p>Rick Rubin, <i>The Creative Act</i> (on AlphaGo):</p>
+        <li>"What was it that allowed a machine to devise a move no one steeped in the game had ever made in
+          <b>thousands of years</b> of play?"
+        </li>
+        <li><b>Beginner's mind</b> is starting from a pure childlike place of <b>not knowing</b>. Living in the moment
+          with as
+          few fixed beliefs as possible. "Any preconceived ideas and accepted conventions <b>limit what's possible</b>."
+        </li>
+        <br>
+        <p>Vogels @ re:Invent 2025, on the Renaissance Developer:</p>
+        <li>"They were curious. They questioned assumptions. They <b>learned broadly</b> and applied that learning
+          deeply. They didn't see boundaries between fields. They built <b>bridges</b> between them."</li>
+        <li>"<b>We are not what we know, but what we are willing to learn.</b>" (Walt Whitman)</li>
+        <li>"Great developers are <b>T-shaped</b>. Deep in one domain, but broad enough to understand how their work
+          fits into a larger system. <b>Become a polymath, expand your knowledge.</b>"</li>
+      </ul>
+    </div>
+    <div class="slide-portrait" style="top:38%; right:32%; left:auto; width:8%;">
+      <img src="images/slide-07-sutton-portrait.png" alt="Rich Sutton">
+    </div>
+    <div class="slide-portrait" style="top:4%; right:24%; left:auto; width:14%;">
+      <img src="images/creative_act_book_cover.png" alt="The Creative Act — book cover">
+    </div>
+    <a class="glass-link" style="bottom:12%; right:8%;"
+      href="https://www.amazon.com/Creative-Act-Way-Being/dp/0593652886" target="_blank">+ The Creative Act: A Way of
+      Being (Rick Rubin)</a>
+    <a class="glass-link" style="bottom:8%; right:8%;" href="https://www.youtube.com/watch?v=3Y1G9najGiI&t=1178"
+      target="_blank">+ Vogels: Curiosity &amp; Learning
+      (18:38)</a>
+    <a class="glass-link" style="bottom:16%; right:8%;"
+      href="https://www.anthropic.com/research/AI-assistance-coding-skills" target="_blank">+ Anthropic: Learn after you
+      vibed, don't skip the learning opportunity</a>
+  </section>
+
+  <!-- The Davos Conversation -->
+  <section class="slide" data-act="Act IV" data-img="images/slide-22-davos-steering.png" data-alt="Steering wheel two diverging roads">
+    <div class="content-title">The Davos Conversation</div>
+    <div class="content-body content-body--with-illust">
+      <div class="float-right--portrait-pair">
+        <figure>
+          <img src="images/amodei_color_pencil.png" alt="Dario Amodei — color pencil portrait">
+          <figcaption>Amodei</figcaption>
+        </figure>
+        <figure>
+          <img src="images/hassabis_color_pencil.png" alt="Demis Hassabis — color pencil portrait">
+          <figcaption>Hassabis</figcaption>
+        </figure>
+      </div>
+      <ul>
+        <li>Amodei (Anthropic) and Hassabis (DeepMind) at Davos 2026</li>
+        <br>
+        <li><b>Steer it one way</b>: you cut cost and lay people off. Produce AI slops with not enough human
+          supervision.</li>
+        <li><b>Steer it the other way</b>: you innovate, get <b>10x engineers</b> who build ever more ambitious
+          projects.</li>
+        <br>
+        <li>The cost of slow adoption is deadly:
+          <ul>
+            <li>Competitors can 10x us</li>
+            <li>Our customers just vibe their own solution</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <a class="glass-link" style="bottom:8%; right:12%;" href="https://www.youtube.com/watch?v=NnVW9epLlTM"
+      target="_blank">+ Amodei & Hassabis @ Davos 2026</a>
+  </section>
+
+  <!-- Roll up your sleeves to not fall behind — Karpathy -->
+  <section class="slide" data-act="Act IV" data-img="images/slide-21-karpathy-fomo.png"
+    data-alt="Programmer on shifting tectonic plates juggling tools">
+    <div class="content-title">The Fear of Missing Out</div>
+    <div class="content-body content-body--with-illust content-body--dense">
+      <div class="float-right--portrait">
+        <img src="images/karpathy_color_pencil.png" alt="Andrej Karpathy — color pencil portrait">
+      </div>
+      <ul>
+        <p>Karpathy: "I've never felt this much behind as a programmer. The profession is being <b>dramatically
+            refactored</b>.</p>
+        <li>There's a new programmable layer of abstraction to master... agents, subagents, prompts, contexts, memory,
+          modes, permissions, tools, plugins, skills, hooks, MCP, LSP, slash commands, workflows, IDE integrations</li>
+        <li>A need to build a mental model for <b>stochastic, fallible, unintelligible and changing entities</b>
+          suddenly intermingled with good old fashioned engineering.</li>
+        <li>Clearly some powerful alien tool was handed around except it comes with no manual... while the resulting
+          <b>magnitude 9 earthquake</b> is rocking the profession.
+        </li>
+        <li>Roll up your sleeves to not fall behind.</li>
+      </ul>
+    </div>
+    <a class="glass-link" style="bottom:8%; right:12%;" href="https://x.com/karpathy/status/2004607146781278521"
+      target="_blank">+ Karpathy on X</a>
+  </section>
+
+  <!-- AI Psychosis — Don't Panic -->
+  <section class="slide" data-act="Act IV" data-img="images/slide-21b-dont-panic.png"
+    data-alt="Arthur Dent resting under a tree, Don't Panic in starry sky">
+    <div class="content-title" style="width:66%;">AI Psychosis</div>
+    <div class="content-body content-body--with-illust content-body--dense" style="width:50%;">
+      <ul>
+        <p>"It's addictive. I can't sleep at night. My mind is racing. There are so many ideas."</p>
+        <li>The AI revolution is triggering a kind of <b>creative psychosis</b>:
+          Every morning there's a new model, a new framework, a new paradigm. You lie awake thinking about all the
+          things you <i>could</i> learn and build.</li>
+        <br>
+        <li><b class="accent-gold">Don't Panic. Bring Your Towel.</b>
+          <ul>
+            <li>A towel is the most massively useful thing an interstellar hitchhiker can have</li>
+            <li>Anyone who can hitch the length of the galaxy and still know where their towel is, is clearly a force to
+              be reckoned with</li>
+          </ul>
+        </li>
+        <li>Rest well. Do an AI detox once in a while. You can't exercise diligence if you are too tired.
+          The swarm will run overnight and get something back to you in the morning (in a sandbox with Ralph Wiggum
+          loop, of course).</li>
+      </ul>
+    </div>
+    <div class="slide-portrait" style="top:38%; right:30%; left:auto; width:15%;">
+      <img src="images/addictive.PNG" alt="Reddit post — It's addictive. I can't sleep at night.">
+    </div>
+    <a class="glass-link" style="bottom:16%; right:8%;" href="https://en.wikipedia.org/wiki/Towel_Day" target="_blank">+
+      Towel Day (May 25)</a>
+    <a class="glass-link" style="bottom:12%; right:8%;"
+      href="https://en.wikipedia.org/wiki/The_Hitchhiker%27s_Guide_to_the_Galaxy" target="_blank">+ The Hitchhiker's
+      Guide to the Galaxy</a>
+    <a class="glass-link" style="bottom:8%; right:8%;"
+      href="https://github.com/anthropics/claude-code/blob/main/plugins/ralph-wiggum/README.md" target="_blank">+ Ralph
+      Wiggum Plugin (Claude Code)</a>
+    <a class="glass-link" style="top:12%; right:8%;" href="https://youtu.be/qwmmWzPnhog?si=8lUhEsP9PYbgJXw8"
+      target="_blank">+ YCombinator: We're All Addicted To Claude Code</a>
+  </section>
+
+  <!-- Don't Trust the Process — Jenny Wen -->
+  <section class="slide" data-act="Act IV" data-img="images/slide-09b-dont-trust-process.png"
+    data-alt="Designer breaking free from rigid flowchart, holding a glowing prototype">
+    <img class="inline-portrait" style="bottom:8%; right:20%;" src="images/don't_trust_the_process.jpg"
+      alt="Jenny Wen — Design Lead, Anthropic">
+    <div class="content-title">Don't Trust the Process</div>
+    <div class="content-body content-body--with-illust" style="font-size:clamp(0.70rem,1.9cqi,36px);">
+      <ul>
+        <p>Jenny Wen, Design Lead at Anthropic (ex-Figma Director):</p>
+        <li>AI raises the floor. A PM can one-shot prompt a working prototype. <b>Your work has to be better than
+            that.</b> What remains? <b class="accent-crimson">Craft, Taste, Quality.</b></li>
+        <li><b>Intuition is not guessing.</b> It is reasoned judgment from deep domain knowledge. "Having great
+          intuition is something to be <b>respected and to aspire to</b>."</li>
+        <li><b>Make something that makes people smile.</b> FigJam's emotes had usability issues during prototyping,
+          but people were <b>smiling and laughing</b>. No problem statement led to it. Just a team that cared deeply.
+        </li>
+        <li>"If you could follow a process, <b>anyone could do it</b>." Trust ourselves again: to try new things, to
+          feel and know when we've built something great.</li>
+      </ul>
+    </div>
+    <a class="glass-link" style="bottom:8%; right:4%;" href="https://www.youtube.com/watch?v=4u94juYwLLM"
+      target="_blank">+ Jenny Wen @ Hatch Conference</a>
+  </section>
+
+  <!-- The New Period in Coding History — Boris Cherny -->
+  <section class="slide" data-act="Act IV" data-img="images/slide-25-boris-cherny.png" data-alt="Boris Cherny with tidal wave of PRs">
+    <div class="content-title">The New Bar</div>
+    <div class="content-body content-body--with-illust">
+      <ul>
+        <p>Boris Cherny (Creator of Claude Code, 2025 December):</p>
+        <br>
+        <li>In the last thirty days, I landed <b class="accent-crimson">259 PRs</b> &mdash; 497 commits, 40k lines
+          added, 38k lines removed.</li>
+        <li><b>Every single line</b> was written by Claude Code + Opus 4.5.</li>
+        <li>Claude consistently runs for minutes, hours, and <b>days at a time</b> (using Stop hooks).</li>
+        <li>Software engineering is changing, and we are entering a <b>new period in coding history</b>.</li>
+        <li>And we're still just getting started.</li>
+      </ul>
+      <br>
+      <p>This is the bar of software now. Velocity is this high.</p>
+    </div>
+    <a class="glass-link" style="bottom:8%; right:12%;" href="https://x.com/bcherny/status/2004887829252317325"
+      target="_blank">+ Boris Cherny on X</a>
+    <a class="glass-link" style="bottom:12%; right:12%;" href="https://www.youtube.com/watch?v=We7BZVKbCVw"
+      target="_blank">+ Boris Cherny: Coding is Largely Solved</a>
+  </section>
+
+  <!-- The Backlog Reality — meme -->
+  <section class="slide" data-act="Act IV"
+    data-narration="The classic Anakin and Padme meme. Senior dev says: put it in the backlog. Junior dev, bright-eyed: so we can fix it later, right? Senior dev stares. So we can fix it later... right? We all know how this ends. The backlog is where tickets go to die.">
+    <div class="content-title" style="display:none;">Put It In Backlog</div>
+    <div class="hero-pair">
+      <img class="hero-image" src="images/backlog_meme.jpg"
+        alt="Backlog meme — Senior dev: put it in backlog; Junior dev: so we can fix it later, right?">
+    </div>
+  </section>
+
+  <!-- The Backlog Reality — what is backlog -->
+  <section class="slide" data-act="Act IV"
+    data-narration="And then there is the Anakin who has ascended beyond all process. Backlog? What is backlog? With a space battle raging behind him, he has moved so fast the backlog simply does not exist anymore. This is the new velocity. 259 PRs in 30 days. The backlog cannot keep up.">
+    <div class="content-title" style="display:none;">Backlog? What Is Backlog?</div>
+    <div class="hero-pair">
+      <img class="hero-image" src="images/what_is_backlog.jpg" alt="Backlog? What is backlog? — Anakin in space battle">
+    </div>
+  </section>
+
+  <!-- The Death Star and the Event Horizon -->
+  <section class="slide" data-act="Act IV"
+    data-narration="The Death Star of infinite dogfooding. Claude building Claude. Tool search tool. The AI is building itself. Meanwhile, look at the AI model event horizon: the shrinking delta between releases, converging toward a singularity. This is why the backlog cannot keep up.">
+    <div class="content-title" style="display:none;">The Death Star and the Event Horizon</div>
+    <div class="hero-pair">
+      <img class="hero-image" src="images/death_star.jpeg" alt="Death Star — Infinite Dogfooding, Claude build Claude"
+        style="max-height:88%; width:45%;">
+      <img class="hero-image" src="images/event_horizon.jpeg" alt="AI Model Event Horizon — The Shrinking Delta"
+        style="max-height:88%; width:45%;">
+    </div>
+  </section>
+
+  <!-- Machines of Loving Grace -->
+  <section class="slide" data-act="Act IV" data-img="images/slide-20-loving-grace.png" data-alt="Mechanical hands cradling garden">
+    <div class="content-title">Machines of Loving Grace</div>
+    <div class="content-body content-body--with-illust">
+      <div class="float-right--portrait">
+        <img src="images/amodei_color_pencil.png" alt="Dario Amodei — color pencil portrait">
+      </div>
+      <ul>
+        <p>Dario Amodei's essay on what powerful AI could achieve <i>if everyone works together</i></p>
+        <li>The pessimist sees job loss. The optimist asks: what can we accomplish with 50 million Nobel laureates in a
+          datacenter? It could be a time of plenty.</li>
+        <li><b>The Compressed 21st Century</b>: 50-100 years of progress in 5-10 years across five domains
+          <ul>
+            <li>Biology/health, neuroscience, economic development, governance, work and meaning</li>
+          </ul>
+        </li>
+        <li>As humans, we <b>embrace the exponentials</b>:
+          <ul>
+            <li><b>Race to the top</b>, not Race to the bottom</li>
+            <li><b>Build simple things that work</b></li>
+            <li>Build not for this model but the next</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div style="position:absolute; bottom:12%; right:4%; display:flex; gap:1cqi; flex-wrap:wrap;">
+      <a class="glass-link" style="position:relative;" href="https://darioamodei.com/essay/machines-of-loving-grace"
+        target="_blank">+ Machines of Loving Grace</a>
+      <a class="glass-link" style="position:relative;"
+        href="https://darioamodei.com/essay/the-adolescence-of-technology" target="_blank">+ The Adolescence of
+        Technology</a>
+      <a class="glass-link" style="position:relative;"
+        href="https://www.nytimes.com/2026/02/12/opinion/artificial-intelligence-anthropic-amodei.html?unlocked_article_code=1.LlA._Aex.L4qLO33VxWId&smid=url-share"
+        target="_blank">+ NYT: Amodei on AI</a>
+    </div>
+  </section>
+
+  <!-- Simple Things That Work — Tai Chi Sword -->
+  <section class="slide" data-act="Act IV" data-img="images/taichi.jpg"
+    data-alt="Zhang Sanfeng teaches Zhang Wuji Tai Chi Sword — Heaven Sword and Dragon Saber">
+    <div class="content-title">So... What Are Simple Things That Work?</div>
+    <div class="content-body content-body--with-illust content-body--dense">
+      <ul>
+        <p>Mastery of Taichi Sword is when you've <b>forgotten every move</b>, in data science term, model generalized from examples.</p>
+        <li><b class="accent-crimson">Dogfooding.</b> Claude Code building Claude Code. Instant feedback loop from engineers via slack and social media, feature triaged by Claude. You will see <b>the love in a dogfood product</b>.</li>
+        <li><b class="accent-purple">A very thin harness.</b> Light ship sails fast. Always latest model. Save cost later. Next Haiku beat this Opus.
+          <ul>
+            <li>95% of enterprise AI rollouts failed because the traditional development lifecycle cannot handle this <b>7-month doubling exponential</b>. Shadow AI always win if you move too slow.</li>
+            <li>What you build <i>could</i> be replaced by the next model</li>
+          </ul>
+        </li>
+        <li><b class="accent-orange">Unship features.</b> Build intuitive features that are <b>infinitely hackable</b> (compound engineering). Less is more. The move you forgot is the move that set you free.</li>
+        <li><b class="accent-gold">Build interfaces for agents.</b> Resend revamped their docs to dead simple. All frontier models learned from the open docs and now always recommend their product as THE default solution. This is <b>New Search Engine Optimization</b>: Attract agents' attention with good doc.</li>
+      </ul>
+    </div>
+    <a class="glass-link" style="bottom:20%; right:4%;" href="https://en.wikipedia.org/wiki/The_Heaven_Sword_and_Dragon_Saber" target="_blank">+ The Heaven Sword and the Dragon Saber (Jin Yong)</a>
+    <a class="glass-link" style="bottom:16%; right:4%;" href="https://youtu.be/Q8wVMdwhlh4?t=468&si=9qfdADQvE__zwiMw" target="_blank">+ YCombinator: Agent Economy is here</a>
+    <a class="glass-link" style="bottom:12%; right:4%;" href="https://resend.com/docs/api-reference/introduction" target="_blank">+ Resend: Dead simple docs for agents</a>
+    <a class="glass-link" style="bottom:8%; right:4%;" href="https://github.com/resend/resend-skills" target="_blank">+ Resend: Skills designed for agents</a>
+  </section>
+
+  <!-- Contact -->
+  <section class="slide" data-act="Epilogue" data-img="images/slide-23-contact-cosmic.png"
+    data-alt="Human looking up at cosmic intelligence">
+    <div class="content-title">Contact</div>
+    <div class="content-body content-body--with-illust">
+      <div class="float-right--portrait">
+        <img src="images/sagan_color_pencil.png" alt="Carl Sagan — color pencil portrait">
+      </div>
+      <ul>
+        <li>Carl Sagan's <i>Contact</i>: when a technological advanced alien civilization observes humanity, they see
+          ants.</li>
+        <br>
+        <li>We are now in contact with an alien form of intelligence</li>
+        <li>When it can outcode, outplan, outscale us &mdash; <b>where is our merit?</b></li>
+        <li>Carl Sagan's answer:
+          <ul>
+            <li>Music. Lovingkindness. Dreams. Adaptability.</li><br>
+          </ul>
+        <li><b>Humanities.</b> So my coping mechanism: Dream big, adapt, and keep building. As a Data Scientist, there has never been a
+          more exciting moment in my life than now. Aren't you curious what we can build with the
+          Swarm?</li>
+      </ul>
+    </div>
+    <a class="glass-link" style="bottom:12%; right:12%;"
+      href="https://www.generationterrorists.com/quotes/contact.shtml#:~:text=Oh%2C%20music.,good%20at%20dreaming"
+      target="_blank">+ Contact (Carl Sagan)</a>
+  </section>
+
+  <!-- Closing — Da Vinci's The Dream of Flight -->
+  <section id="act-v" class="slide slide--desk" data-narration="The Dream of Flight, by Leonardo da Vinci.
+Once you have taken flight, you will decide. Gaze towards the sky, you will know. That is where your heart will feel at home.
+The first great bird will take flight towards the sun, sweeping over the great Mountain Ciceri, filling the universe with wonder and glory.
+Man will be lifted by his own creation, just like birds towards the sky, filling the universe with wonder and glory.
+Thank you. The swarm is here. Navigate wisely.">
+    <div class="desk-sketch"><img src="images/slide-24-compass-rose.png" alt="Compass rose with neural patterns"></div>
+
+    <!-- Stanza paper — tilted like a note on the desk, compact left column -->
+    <div class="glass-note" style="top:6%; left:3%; width:38%;">
+      <div class="glass-note__title">The Dream of Flight</div>
+      <div class="glass-note__attribution">Leonardo da Vinci</div>
+      <div class="glass-note__divider"></div>
+      <div class="glass-note__body">
+        Once you have taken flight, you will decide<br>
+        Gaze towards the sky, you will know<br>
+        That is where your heart will feel at home<br>
+        <br>
+        The first great bird will take flight towards the sun<br>
+        Sweeping over the great Mt. Ciceri<br>
+        Filling the universe with wonder and glory<br>
+        <br>
+        <b style="font-style:normal;">Man will be lifted by his own creation</b><br>
+        Just like birds towards the sky<br>
+        Filling the universe with wonder and glory
+      </div>
+    </div>
+
+    <!-- Da Vinci portrait — frosted glass paperweight on the stanza -->
+    <div class="glass-frame" style="top:8%; left:33%; width:12%;">
+      <img src="images/davinci_color_pencil.png" alt="Leonardo da Vinci — color pencil portrait">
+    </div>
+
+    <!-- YouTube embed — glass panel under the portrait, on top of the stanza -->
+    <div class="glass-video" style="top:32%; left:32%; width:18%;">
+      <div id="yt-sogno" class="glass-video__aspect">
+        <!-- Thumbnail fallback (file:// or if iframe blocked) -->
+        <a href="https://www.youtube.com/watch?v=WQYN2P3E06s" target="_blank"
+          style="position:absolute; inset:0; cursor:pointer;">
+          <img class="yt-thumb" src="https://img.youtube.com/vi/WQYN2P3E06s/hqdefault.jpg"
+            alt="Sogno di Volare — Christopher Tin">
+          <img class="yt-play"
+            src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_play_button_icon_%282013%E2%80%932017%29.svg"
+            alt="Play">
+        </a>
+      </div>
+      <script>
+        // Upgrade to iframe when served over http/https (YouTube blocks file:// embeds)
+        if (location.protocol === 'http:' || location.protocol === 'https:') {
+          var c = document.getElementById('yt-sogno');
+          c.innerHTML = '<iframe src="https://www.youtube.com/embed/WQYN2P3E06s" frameborder="0"'
+            + ' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"'
+            + ' allowfullscreen style="position:absolute; top:0; left:0; width:100%; height:100%;"></iframe>';
+        }
+      </script>
+      <div class="glass-video__caption">
+        <em>Sogno di Volare</em> — Christopher Tin
+      </div>
+      <!-- Print fallback: real <a> tag so the link is clickable in PDF -->
+      <a class="glass-link print-link"
+        style="display:none; position:relative; margin-top:0.3cqi; font-size:clamp(0.25rem,0.55cqi,9px);"
+        href="https://www.youtube.com/watch?v=WQYN2P3E06s" target="_blank">&#9654; Sogno di Volare — YouTube</a>
+    </div>
+
+    <!-- Thank You — tight glass panels, below the stanza -->
+    <div class="glass-panel glass-panel--divider-title" style="left:5%; bottom:30%; top:auto;
+                font-size:clamp(1.4rem,4.2cqi,80px); padding:0.8cqi 2cqi;">Thank You</div>
+    <div class="glass-panel glass-panel--divider-body" style="left:5%; bottom:20%; top:auto;
+                font-size:clamp(0.7rem,1.6cqi,28px); padding:0.6cqi 1.6cqi;">The swarm is here. Navigate wisely.</div>
+
+    <!-- Co-authored by the swarm -->
+    <div class="glass-link-row" style="bottom:14%; left:5%;">
+      <div class="glass-link" style="pointer-events:none;">Co-authored by swarm</div>
+      <a class="glass-link" href="https://docs.anthropic.com/en/docs/claude-code/overview" target="_blank">+ Claude Code</a>
+      <a class="glass-link" href="https://www.meshy.ai" target="_blank">+ Meshy.ai</a>
+      <a class="glass-link" href="https://gemini.google/overview/image-generation/" target="_blank">+ Google Nano Banana</a>
+      <a class="glass-link" href="https://huggingface.co/hexgrad/Kokoro-82M" target="_blank">+ Kokoro TTS</a>
+      <a class="glass-link" href="https://huggingface.co/nvidia/Audio2Face-3D-v3.0" target="_blank">+ NVIDIA Audio2Face</a>
+    </div>
+
+    <div class="glass-link-row" style="bottom:8%; left:5%;">
+      <div class="glass-link" style="pointer-events:none;">Compound Engineering</div>
+      <a class="glass-link" href="narrator.js" target="_blank">+ Digital Human Narrator</a>
+      <a class="glass-link" href="slide-template.zip" download>+ Download This Liquid Glass Template (Claude Agent Skill) (.zip)</a>
+      <a class="glass-link" href="slide-template/index.html" target="_blank">+ Demo</a>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       Avatar + TTS + Narrator
+       ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- Read-aloud controls (avatar toggle lives here; read-aloud button hidden for slide deck) -->
+  <div class="read-aloud-controls">
+    <div class="voice-selector" id="voiceSelector" style="display:none;">
+      <label for="voiceSelect">Choose Voice:</label>
+      <select id="voiceSelect">
+        <option value="">Default</option>
+      </select>
+    </div>
+    <div class="button-group">
+      <button class="settings-button" id="settingsBtn" title="Change voice" style="display:none;">
+        <span>Voices</span>
+      </button>
+      <button class="read-aloud-button" id="readAloudBtn" title="Read aloud" style="display:none;">
+        <span id="readAloudText">Read Aloud</span>
+      </button>
+    </div>
+  </div>
+
+  <script src="slides.js"></script>
+
+  <!-- Three.js importmap for avatar engine -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <!-- Avatar: blendshape debug panel (creates DOM), preview loader (creates Three.js canvas + styles), read-aloud TTS -->
+  <script src="../avatar/blendshape-debug.js?v=5"></script>
+  <script type="module" src="../avatar/blendshape-debug-preview.js?v=4"></script>
+  <script src="../read-aloud.js?v=4"></script>
+
+  <!-- Narrator: personality-driven slide narration -->
+  <script src="narrator.js?v=1"></script>
+
+</body>
+
+</html>

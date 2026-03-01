@@ -1,0 +1,1654 @@
+:root {
+  --dk2: #282828;
+  --lt1: #FFFFFF;
+  --lt2: #EDE7D6;
+  --accent1: #8A17CC;
+  --accent2: #FF0080;
+  --accent3: #815FFF;
+  --accent4: #FF4000;
+  --accent5: #F7BF00;
+  --accent6: #931036;
+  --muted: #808080;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  background: #111;
+  overflow-x: hidden;
+  scrollbar-width: none;          /* Firefox */
+}
+html::-webkit-scrollbar { display: none; }   /* Chrome / Safari / Edge */
+
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2vh;
+  padding: 2vh 0;
+}
+
+/* -- Slide frame -------------------------------------------------- */
+.slide {
+  position: relative;
+  width: min(100vw, calc(100vh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  overflow: hidden;
+  container-type: inline-size;
+  background: var(--lt1);
+}
+
+/* -- Logo pill (shared) ------------------------------------------- */
+.logo-pill {
+  position: absolute;
+  z-index: 1000;
+  width: 6.4%;
+  aspect-ratio: 772567 / 619916;
+  border-radius: 9%;
+  top: 94.7%;
+}
+.logo-pill img {
+  position: absolute;
+  top: 13%;
+  left: 12%;
+  width: 76%;
+}
+.logo-pill--right   { right: 2.6%; }
+.logo-pill--pink    { background: var(--accent2); }
+.logo-pill--purple  { background: var(--accent3); }
+.logo-pill--crimson { background: var(--accent6); }
+.logo-pill--blank   { background: #E0E0E0; }
+.logo-pill--glass {
+  background: linear-gradient(
+    135deg,
+    rgba(147, 16, 54, 0.78) 0%,
+    rgba(147, 16, 54, 0.62) 100%
+  );
+  backdrop-filter: blur(18px) saturate(1.8);
+  -webkit-backdrop-filter: blur(18px) saturate(1.8);
+  border: 1px solid rgba(255, 180, 200, 0.35);
+  box-shadow:
+    0 4px 16px rgba(147, 16, 54, 0.18),
+    inset 0 1px 1px rgba(255, 200, 210, 0.45),
+    inset 0 -1px 2px rgba(147, 16, 54, 0.10);
+}
+
+/* -- Footer (shared) ---------------------------------------------- */
+.footer {
+  position: absolute;
+  bottom: 0.8%;
+  font-size: clamp(0.35rem, 0.83cqi, 16px);
+  line-height: 1.4;
+  z-index: 10;
+}
+.footer--cover {
+  left: 50%;
+  bottom: 2.5%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: var(--lt1);
+}
+.footer--content {
+  left: 1.1%;
+  color: var(--muted);
+}
+.footer b  { font-weight: 700; }
+.footer span { font-weight: 400; }
+
+/* -- Slide number ------------------------------------------------- */
+.slide-num {
+  position: absolute;
+  right: 0.8%;
+  bottom: 1.5%;
+  font: bold clamp(0.35rem, 0.94cqi, 18px) "Century Gothic", sans-serif;
+  color: var(--muted);
+  z-index: 10;
+}
+
+/* =================================================================
+   COVER CENTER
+   ================================================================= */
+.cover-bg {
+  position: absolute;
+  left: 1.23%;  top: 2.17%;
+  width: 97.53%; height: 95.65%;
+  overflow: hidden;
+}
+.cover-bg--crimson { background: var(--accent6); }
+.cover-bg--purple  { background: var(--accent1); }
+
+.cover-bg__texture {
+  position: absolute; inset: 0;
+  opacity: 0.15; pointer-events: none; z-index: 1;
+}
+.cover-bg__texture img { width: 100%; height: 100%; object-fit: cover; }
+
+.cover-bg__circles {
+  position: absolute;
+  left: 14.2%; top: 0; width: 71.6%; height: 100%;
+  z-index: 2; pointer-events: none;
+}
+.cover-bg__circles img { width: 100%; height: 100%; object-fit: contain; }
+
+.cover-title {
+  position: absolute;
+  left: 25%; top: 25%; width: 50%;
+  text-align: center;
+  font-weight: bold;
+  font-size: clamp(1.6rem, 5cqi, 96px);
+  line-height: 1.15;
+  color: var(--lt1);
+  z-index: 10;
+}
+
+.cover-subtitle {
+  position: absolute;
+  left: 25%; top: 62%; width: 50%;
+  text-align: center;
+  font-weight: 400;
+  font-size: clamp(1.1rem, 2.9cqi, 56px);
+  line-height: 1.35;
+  color: var(--lt1);
+  z-index: 10;
+}
+
+/* =================================================================
+   COVER LEFT
+   ================================================================= */
+.cover-bg--grad-pink   { background: linear-gradient(60deg, var(--accent6) 25%, var(--accent2)); }
+.cover-bg--grad-purple { background: linear-gradient(60deg, var(--accent1) 25%, var(--accent3)); }
+
+.cover-bg__swoosh {
+  position: absolute;
+  left: 37%; top: 0; width: 63%; height: 100%;
+  z-index: 2; pointer-events: none;
+}
+.cover-bg__swoosh img { width: 100%; height: 100%; object-fit: cover; object-position: right center; }
+
+.cover-title--left {
+  left: 3.3%; top: 10%; width: 57%;
+  text-align: left;
+}
+.cover-subtitle--left {
+  left: 3.3%; top: auto; width: 57%;
+  text-align: left;
+}
+
+/* =================================================================
+   CONTENT SLIDE
+   ================================================================= */
+.content-bg {
+  position: absolute; inset: 0;
+  z-index: 0; pointer-events: none; opacity: 0.7;
+}
+.content-bg img { width: 100%; height: 100%; object-fit: cover; }
+
+.content-title {
+  position: absolute;
+  left: 3.85%; top: 6.5%; width: 90%;
+  font-weight: bold;
+  font-size: clamp(1.2rem, 3.1cqi, 60px);
+  line-height: 1.2;
+  color: var(--dk2);
+  z-index: 1;
+}
+
+.content-body {
+  position: absolute;
+  left: 3.85%; top: 17.8%; width: 89%; height: 72%;
+  font-size: clamp(0.85rem, 2.08cqi, 40px);
+  line-height: 1.5;
+  color: var(--dk2);
+  z-index: 1;
+}
+.content-body ul { list-style: none; padding: 0; }
+.content-body li { margin-left: 1.5em; margin-bottom: 0.15em; }
+.content-body li::before {
+  content: "\2022";
+  display: inline-block;
+  width: 1.5em;
+  margin-left: -1.5em;
+}
+.content-body li li { margin-left: 2.5em; }
+.content-body li li::before { margin-left: -1.5em; }
+
+/* -- Act signpost tag (color-coded pill, top-left) ---------------- */
+.slide[data-act]::after {
+  content: attr(data-act);
+  position: absolute;
+  top: 1.8%;
+  left: 1.2%;
+  z-index: 20;
+  font: 600 clamp(0.3rem, 0.72cqi, 12px)/1 "Century Gothic", Arial, sans-serif;
+  letter-spacing: 0.5px;
+  padding: 0.35cqi 0.8cqi;
+  border-radius: 100vw;
+  color: #fff;
+  backdrop-filter: blur(8px) saturate(1.4);
+  -webkit-backdrop-filter: blur(8px) saturate(1.4);
+  border: 1px solid rgba(255,255,255,0.25);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  pointer-events: none;
+  opacity: 0.85;
+}
+.slide[data-act="Act I"]::after        { background: rgba(147,16,54,0.72); }
+.slide[data-act="Act II"]::after       { background: rgba(138,23,204,0.72); }
+.slide[data-act="Act III"]::after      { background: rgba(255,0,128,0.72); }
+.slide[data-act="Act IV"]::after       { background: rgba(255,64,0,0.72); }
+.slide[data-act="Epilogue"]::after     { background: rgba(200,154,0,0.72); }
+
+/* Divider slides: hide act tag (they ARE the signpost) */
+.slide--desk[data-act]::after { display: none; }
+
+/* -- Emphasis helpers --------------------------------------------- */
+.accent-crimson { color: var(--accent6); }
+.accent-purple  { color: var(--accent1); }
+.accent-pink    { color: var(--accent2); }
+.accent-orange  { color: var(--accent4); }
+.accent-gold    { color: var(--accent5); }
+
+/* -- Image placeholder for illustrations -------------------------- */
+.illust {
+  position: absolute;
+  right: 3%; top: 18%; width: 30%; height: 68%;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2; pointer-events: none;
+}
+.illust img {
+  max-width: 100%; max-height: 100%; object-fit: contain;
+  border-radius: 4px;
+}
+
+/* When illustration is present, constrain body width */
+.content-body--with-illust { width: 56%; }
+
+/* Dense variant for text-heavy slides */
+.content-body--dense {
+  font-size: clamp(0.72rem, 1.72cqi, 33px);
+  line-height: 1.38;
+}
+
+/* Pricing table with data bars */
+.pricing-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78em;
+  line-height: 1.3;
+  margin-top: 0.5em;
+}
+.pricing-table th {
+  text-align: left;
+  padding: 0.3em 0.6em;
+  border-bottom: none;
+  background: var(--accent1);
+  color: #fff;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  border-radius: 3px 3px 0 0;
+}
+.pricing-table td {
+  padding: 0.3em 0.5em;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  white-space: nowrap;
+}
+.pricing-table td:first-child {
+  font-weight: 600;
+  width: 1%;
+}
+.pricing-table .bar-cell {
+  position: relative;
+  width: auto;
+}
+.pricing-table .bar-cell .bar {
+  position: absolute;
+  left: 0; top: 15%; height: 70%;
+  border-radius: 3px;
+  opacity: 0.18;
+  z-index: 0;
+}
+.pricing-table .bar-cell span {
+  position: relative;
+  z-index: 1;
+}
+.pricing-table .bar--green  { background: #2e7d32; opacity: 0.22; }
+.pricing-table .bar--red    { background: var(--accent6); }
+.pricing-table--vertical {
+  float: right;
+  width: 48%;
+  margin: 0 -2.5em 0.5em 1em;
+}
+.pricing-table--vertical td:first-child { width: 40%; }
+.pricing-table--vertical .bar-cell { width: 60%; }
+
+/* Inline portrait — glass-link positioned handle */
+.inline-portrait {
+  position: absolute;
+  z-index: 4;
+  width: 12cqi;
+  border-radius: 1.2cqi;
+  object-fit: cover;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.10),
+    0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* =================================================================
+   FLOAT LAYOUT — Magazine-style text wrapping
+   ================================================================= */
+
+/* -- Float utilities ------------------------------------------------ */
+.float-right {
+  float: right;
+  margin-left: 1.5cqi;
+  margin-bottom: 1cqi;
+}
+.float-left {
+  float: left;
+  margin-right: 1.5cqi;
+  margin-bottom: 1cqi;
+}
+
+/* -- Sized float: portrait (~10cqi) --------------------------------- */
+.float-right--portrait {
+  float: right;
+  width: 10cqi;
+  margin-left: 1.5cqi;
+  margin-bottom: 1cqi;
+  border-radius: 1.2cqi;
+  overflow: hidden;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.10),
+    0 1px 4px rgba(0, 0, 0, 0.06);
+  shape-outside: margin-box;
+  shape-margin: 0.5cqi;
+}
+.float-left--portrait {
+  float: left;
+  width: 10cqi;
+  margin-right: 1.5cqi;
+  margin-bottom: 1cqi;
+  border-radius: 1.2cqi;
+  overflow: hidden;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.10),
+    0 1px 4px rgba(0, 0, 0, 0.06);
+  shape-outside: margin-box;
+  shape-margin: 0.5cqi;
+}
+.float-right--portrait img,
+.float-left--portrait img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* -- Sized float: portrait pair (~20cqi, two side-by-side) ---------- */
+.float-right--portrait-pair {
+  float: right;
+  width: 20cqi;
+  margin-left: 1.5cqi;
+  margin-bottom: 1cqi;
+  display: flex;
+  gap: 0.8cqi;
+  shape-outside: margin-box;
+  shape-margin: 0.5cqi;
+}
+.float-right--portrait-pair figure {
+  flex: 1;
+  margin: 0;
+  text-align: center;
+  border-radius: 1.2cqi;
+  overflow: hidden;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.10),
+    0 1px 4px rgba(0, 0, 0, 0.06);
+}
+.float-right--portrait-pair img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+.float-right--portrait-pair figcaption {
+  font-size: clamp(0.5rem, 1cqi, 14px);
+  opacity: 0.7;
+  padding: 0.3cqi 0;
+}
+
+/* -- Sized float: table (~25cqi) ------------------------------------ */
+.float-right--table {
+  float: right;
+  width: 25cqi;
+  margin-left: 1.5cqi;
+  margin-bottom: 1cqi;
+}
+
+/* -- Clear helpers -------------------------------------------------- */
+.clear-right { clear: right; }
+.clear-left  { clear: left; }
+.clear-both  { clear: both; }
+
+/* -- Portrait row: centered flex strip ------------------------------ */
+.portrait-row {
+  display: flex;
+  justify-content: center;
+  gap: 1.5cqi;
+  margin-top: 1.2cqi;
+  margin-bottom: 0.8cqi;
+  clear: both;
+}
+.portrait-row__item {
+  flex: 0 0 auto;
+  width: 10cqi;
+  margin: 0;
+  text-align: center;
+}
+.portrait-row__item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 1.2cqi;
+  object-fit: cover;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.10),
+    0 1px 4px rgba(0, 0, 0, 0.06);
+}
+.portrait-row__label {
+  font-size: clamp(0.4rem, 0.9cqi, 16px);
+  margin-top: 0.4cqi;
+  opacity: 0.65;
+  line-height: 1.3;
+}
+
+/* -- Portrait stack: vertical column floated as one block ----------- */
+.portrait-stack {
+  float: right;
+  width: 10cqi;
+  margin-left: 1.5cqi;
+  margin-bottom: 1cqi;
+  display: flex;
+  flex-direction: column;
+  gap: 1cqi;
+  shape-outside: margin-box;
+  shape-margin: 0.5cqi;
+}
+.portrait-stack__item {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+}
+.portrait-stack__item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 1.2cqi;
+  object-fit: cover;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.10),
+    0 1px 4px rgba(0, 0, 0, 0.06);
+}
+.portrait-stack__label {
+  font-size: clamp(0.4rem, 0.9cqi, 16px);
+  margin-top: 0.3cqi;
+  opacity: 0.65;
+  line-height: 1.3;
+}
+
+/* -- Framework table ---------------------------------------------- */
+.framework-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82em;
+  line-height: 1.4;
+}
+.framework-table th {
+  text-align: left;
+  padding: 0.3em 0.5em;
+  border-bottom: 2px solid var(--accent6);
+  color: var(--dk2);
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.framework-table td {
+  padding: 0.4em 0.5em;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.framework-table td:first-child {
+  white-space: nowrap;
+  width: 1%;
+}
+.framework-table td:last-child {
+  font-style: italic;
+  color: var(--accent6);
+  white-space: nowrap;
+  width: 1%;
+}
+
+/* =================================================================
+   CHAT BUBBLE SLIDES (liquid glass iMessage)
+   ================================================================= */
+.chat-thread {
+  position: absolute;
+  left: 12%; top: 17%; width: 76%; height: 74%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.8cqi;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.chat-msg {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5cqi;
+  max-width: 65%;
+}
+.chat-msg--right {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+/* Avatar circle */
+.chat-avatar {
+  width: 3.2cqi;
+  height: 3.2cqi;
+  border-radius: 50%;
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.3cqi;
+  color: var(--lt1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.chat-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Name label */
+.chat-name {
+  font-size: clamp(0.4rem, 0.85cqi, 15px);
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 0.1cqi;
+  padding-left: 0.4cqi;
+}
+.chat-msg--right .chat-name {
+  text-align: right;
+  padding-left: 0;
+  padding-right: 0.4cqi;
+}
+
+/* Bubble column */
+.chat-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15cqi;
+  min-width: 0;
+}
+
+/* Liquid glass bubble base */
+.chat-bubble {
+  padding: 0.6cqi 1cqi;
+  border-radius: 1.2cqi;
+  font-size: clamp(0.6rem, 1.5cqi, 26px);
+  line-height: 1.4;
+  word-wrap: break-word;
+  backdrop-filter: blur(20px) saturate(1.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  box-shadow:
+    0 1px 4px rgba(0,0,0,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+/* Left bubble: frosted gray glass */
+.chat-bubble--left {
+  background: rgba(200,200,210,0.35);
+  border: 1px solid rgba(180,180,195,0.4);
+  color: var(--dk2);
+  border-bottom-left-radius: 0.2cqi;
+}
+
+/* Right bubble: frosted blue glass */
+.chat-bubble--right {
+  background: rgba(0,122,255,0.75);
+  border: 1px solid rgba(80,160,255,0.5);
+  color: #FFFFFF;
+  border-bottom-right-radius: 0.2cqi;
+  box-shadow:
+    0 2px 8px rgba(0,122,255,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.2);
+}
+.chat-bubble--right b { color: #D0E8FF; }
+
+/* Annotation row (stage directions) */
+.chat-annotation {
+  align-self: center;
+  font-size: clamp(0.5rem, 1.15cqi, 20px);
+  color: var(--muted);
+  font-style: italic;
+  padding: 0.2cqi 0;
+  background: rgba(200,200,210,0.15);
+  border-radius: 0.8cqi;
+  padding: 0.25cqi 1cqi;
+  border: 1px solid rgba(180,180,195,0.2);
+}
+
+/* Avatar colors */
+.chat-avatar--scott  { background: linear-gradient(135deg, #3478F6, #5AC8FA); }
+.chat-avatar--tester { background: linear-gradient(135deg, #28A745, #5BD778); }
+.chat-avatar--ivan   { background: linear-gradient(135deg, #8A17CC, #B44DE8); }
+.chat-avatar--ping   { background: linear-gradient(135deg, #FF4000, #FF7744); }
+.chat-avatar--me     { background: transparent; }
+
+/* =================================================================
+   TITLE SLIDE — Sketching Desk with Acrylic Paperweight
+   ================================================================= */
+.slide--desk {
+  background: #f5f0e6;                       /* cream paper tone fallback */
+}
+
+.desk-sketch {
+  position: absolute; inset: 0;
+  z-index: 0; pointer-events: none;
+}
+.desk-sketch img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  object-position: right top;
+}
+
+/* Acrylic paperweight panels — liquid glass over the sketch */
+.glass-panel {
+  position: absolute;
+  z-index: 3;
+  padding: 1.2cqi 2.4cqi;
+  border-radius: 1.6cqi;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.42) 0%,
+    rgba(255, 255, 255, 0.18) 100%
+  );
+  backdrop-filter: blur(18px) saturate(1.8);
+  -webkit-backdrop-filter: blur(18px) saturate(1.8);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.18),
+    0 2px 6px rgba(0, 0, 0, 0.10),
+    inset 0 1px 1px rgba(255, 255, 255, 0.55),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.10);
+}
+
+.glass-panel--title {
+  bottom: 8%; left: 5%;
+  text-align: left;
+  font-weight: bold;
+  font-size: clamp(1.6rem, 5cqi, 96px);
+  line-height: 1.15;
+  color: #1a1a2e;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.glass-panel--subtitle {
+  bottom: 8%; right: 5%;
+  text-align: right;
+  font-size: clamp(0.85rem, 2.08cqi, 40px);
+  line-height: 1.5;
+  color: #2c2c3a;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+/* Divider variants — left-aligned section headers */
+.glass-panel--divider-title {
+  top: 30%; left: 5%;
+  text-align: left;
+  font-weight: bold;
+  font-size: clamp(1.6rem, 5cqi, 96px);
+  line-height: 1.15;
+  color: #1a1a2e;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.glass-panel--divider-body {
+  top: 52%; left: 5%;
+  text-align: left;
+  font-size: clamp(0.85rem, 2.08cqi, 40px);
+  line-height: 1.5;
+  color: #555;
+  font-style: italic;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+/* Author portrait — glass-framed color pencil on title slide */
+.slide-portrait {
+  position: absolute;
+  top: 4%; left: 4%;
+  width: 13%;
+  z-index: 5;
+  border-radius: 1.2cqi;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(14px) saturate(1.6);
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  box-shadow:
+    0 6px 24px rgba(0, 0, 0, 0.15),
+    0 2px 6px rgba(0, 0, 0, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45);
+  padding: 0.4cqi;
+}
+.slide-portrait img {
+  width: 100%;
+  display: block;
+  border-radius: 0.9cqi;
+  object-fit: cover;
+}
+
+/* Small glass link pill — inconspicuous source reference */
+.glass-link {
+  position: absolute;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4cqi;
+  padding: 0.4cqi 1cqi;
+  border-radius: 100px;
+  font-size: clamp(0.4rem, 0.85cqi, 15px);
+  font-weight: 600;
+  color: rgba(60, 60, 80, 0.7);
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    0 1px 4px rgba(0, 0, 0, 0.04),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45);
+  transition: all 0.3s ease;
+}
+/* Row container for glass-link pills — replaces absolute left positioning */
+.glass-link-row {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5cqi;
+}
+.glass-link-row .glass-link {
+  position: static;
+}
+
+.glass-link:hover {
+  background: rgba(255, 255, 255, 0.4);
+  color: rgba(40, 40, 60, 0.9);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+.glass-link--accent {
+  background: rgba(138, 23, 204, 0.15);
+  border: 1px solid rgba(138, 23, 204, 0.3);
+  color: rgba(90, 10, 150, 0.85);
+}
+.glass-link--accent:hover {
+  background: rgba(138, 23, 204, 0.25);
+  color: rgba(90, 10, 150, 1);
+}
+
+/* =================================================================
+   SLIDE NAVIGATION — Liquid Glass Pill + Thumbnail Panel
+   ================================================================= */
+
+/* -- Collapsed pill ------------------------------------------------ */
+.slide-nav-pill {
+  position: fixed;
+  right: 1.5vw;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10000;
+  width: clamp(16px, 2vw, 24px);
+  height: clamp(60px, 9vh, 84px);
+  border-radius: 100px;
+  overflow: hidden;
+  cursor: pointer;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.08) 100%
+  );
+  backdrop-filter: blur(16px) saturate(1.6);
+  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.3),
+    0 1px 4px rgba(0, 0, 0, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  transition:
+    width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    border-radius 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+.slide-nav-pill:hover:not(.is-expanded) {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0.15) 100%
+  );
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.55);
+  transform: translateY(-50%) scale(1.15);
+}
+
+/* -- Dot track inside collapsed pill ------------------------------- */
+.slide-nav-pill__track {
+  position: absolute;
+  inset: 20% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  opacity: 1;
+  transition: opacity 0.15s ease;
+}
+.slide-nav-pill.is-expanded .slide-nav-pill__track { opacity: 0; pointer-events: none; }
+
+.slide-nav-pill__dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.slide-nav-pill__indicator {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent6);
+  box-shadow: 0 0 6px rgba(147, 16, 54, 0.6);
+  transform: translate(-50%, -50%);
+  transition: top 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* -- Expanded panel ------------------------------------------------ */
+.slide-nav-pill.is-expanded {
+  width: clamp(180px, 18vw, 280px);
+  height: clamp(400px, 70vh, 700px);
+  border-radius: 16px;
+  right: 1vw;
+  background: linear-gradient(
+    135deg,
+    rgba(20, 20, 30, 0.78) 0%,
+    rgba(20, 20, 30, 0.58) 100%
+  );
+  backdrop-filter: blur(24px) saturate(1.8);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 12px 48px rgba(0, 0, 0, 0.45),
+    0 4px 12px rgba(0, 0, 0, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.05);
+  transform: translateY(-50%) scale(1);
+}
+
+/* -- Panel inner layout -------------------------------------------- */
+.slide-nav-panel {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease 0.15s;
+}
+.slide-nav-pill.is-expanded .slide-nav-panel {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.slide-nav-panel__scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  padding: 10px 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+.slide-nav-panel__scroll::-webkit-scrollbar { width: 4px; }
+.slide-nav-panel__scroll::-webkit-scrollbar-track { background: transparent; }
+.slide-nav-panel__scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+/* -- Act group ----------------------------------------------------- */
+.slide-nav-group { margin-bottom: 8px; }
+.slide-nav-group__label {
+  font-size: clamp(0.4rem, 0.65vw, 11px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.45);
+  padding: 6px 6px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 6px;
+}
+
+.slide-nav-group__thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 2px;
+}
+
+/* -- Thumbnail button ---------------------------------------------- */
+.slide-nav-thumb {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+.slide-nav-thumb:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.slide-nav-thumb__preview {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 4px;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: rgba(255, 255, 255, 0.55);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.slide-nav-thumb__preview--text {
+  background: linear-gradient(135deg, rgba(60, 60, 80, 0.5), rgba(40, 40, 60, 0.3));
+}
+
+.slide-nav-thumb__caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 3px 5px;
+  font-size: clamp(0.3rem, 0.5vw, 8px);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+  transition: color 0.2s ease;
+}
+
+/* -- Active slide highlight ---------------------------------------- */
+.slide-nav-thumb.is-active .slide-nav-thumb__preview {
+  border-color: var(--accent6);
+  box-shadow: 0 0 10px rgba(147, 16, 54, 0.4);
+}
+.slide-nav-thumb.is-active .slide-nav-thumb__caption {
+  color: #fff;
+}
+
+/* -- Mobile: bottom-center horizontal ------------------------------ */
+@media (max-width: 768px) {
+  .slide-nav-pill {
+    right: auto;
+    bottom: 1.5vh;
+    top: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    width: clamp(40px, 10vw, 56px);
+    height: clamp(14px, 2vh, 22px);
+  }
+  .slide-nav-pill:hover:not(.is-expanded) {
+    transform: translateX(-50%) scale(1.15);
+  }
+  .slide-nav-pill__track {
+    flex-direction: row;
+    inset: 0 20%;
+  }
+  .slide-nav-pill__indicator {
+    transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1), top 0s;
+  }
+  .slide-nav-pill.is-expanded {
+    width: 92vw;
+    height: clamp(130px, 20vh, 200px);
+    bottom: 1vh;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 14px;
+  }
+  .slide-nav-group__thumbs {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 6px;
+  }
+  .slide-nav-thumb__preview {
+    min-width: 100px;
+    width: 100px;
+  }
+  .slide-nav-panel__scroll {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 12px;
+  }
+  .slide-nav-group {
+    flex-shrink: 0;
+    margin-bottom: 0;
+  }
+}
+
+/* -- Comic panels for RAG vs Agent slide --------------------------- */
+.comic-panels-container {
+  display: flex;
+  gap: 1cqi;
+  flex-direction: column;
+}
+
+.comic-panel {
+  background: rgba(255,255,255,0.95);
+  padding: 1cqi;
+  border-radius: 6px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+}
+
+.comic-panel__header {
+  font-size: clamp(0.45rem, 0.95cqi, 14px);
+  font-weight: 600;
+  margin-bottom: 0.4cqi;
+}
+
+.comic-panel__header--purple {
+  color: var(--accent1);
+}
+
+.comic-panel__header--crimson {
+  color: var(--accent6);
+}
+
+.comic-panel__image {
+  width: 100%;
+  border-radius: 4px;
+}
+
+.comic-panel__caption {
+  font-size: clamp(0.35rem, 0.75cqi, 12px);
+  margin-top: 0.5cqi;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* =================================================================
+   ICON GRID — Technology timeline & milestone comparison galleries
+   ================================================================= */
+.icon-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1cqi;
+  justify-content: center;
+}
+.icon-grid--secondary { margin-top: 0.5cqi; }
+.icon-grid--primary   { margin-top: 1cqi; }
+
+.icon-grid__item {
+  flex: 1 1 20%;
+  min-width: 8cqi;
+  margin: 0;
+  text-align: center;
+}
+.icon-grid__item--equal { flex: 1; min-width: 0; }
+
+.icon-grid__img {
+  width: 60%;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+.icon-grid__img--full { width: 100%; }
+
+.icon-grid__label {
+  font-size: clamp(0.5rem, 1cqi, 14px);
+  opacity: 0.7;
+  margin-top: 0.3cqi;
+}
+
+/* =================================================================
+   HERO IMAGE — Full-slide or paired showcase images
+   ================================================================= */
+.hero-pair {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2cqi;
+  padding: 2cqi;
+}
+
+.hero-image {
+  max-height: 92%;
+  max-width: 92%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+}
+
+/* =================================================================
+   OVERLAY PANEL — Positioned image callouts over slides
+   ================================================================= */
+.overlay-panel {
+  position: absolute;
+  z-index: 5;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 0.8cqi;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+}
+.overlay-panel img {
+  width: 100%;
+  border-radius: 4px;
+  display: block;
+}
+
+/* =================================================================
+   GLASS NOTE — Tilted parchment with poem text (closing slide)
+   ================================================================= */
+.glass-note {
+  position: absolute;
+  z-index: 2;
+  transform: rotate(-1.5deg);
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(14px) saturate(1.6);
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 1.2cqi;
+  box-shadow:
+    0 6px 24px rgba(0, 0, 0, 0.15),
+    0 2px 6px rgba(0, 0, 0, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.5);
+  padding: 1.4cqi 2cqi 1.2cqi;
+}
+
+.glass-note__title {
+  font-family: Georgia, 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+  font-size: clamp(0.4rem, 0.85cqi, 13px);
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: #1a1a2e;
+  opacity: 0.55;
+  text-transform: uppercase;
+  margin-bottom: 0.3cqi;
+}
+
+.glass-note__attribution {
+  font-family: Georgia, 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+  font-size: clamp(0.35rem, 0.7cqi, 11px);
+  font-weight: 400;
+  color: #1a1a2e;
+  opacity: 0.45;
+  margin-bottom: 0.5cqi;
+}
+
+.glass-note__divider {
+  width: 25%;
+  height: 1px;
+  background: #1a1a2e;
+  opacity: 0.15;
+  margin-bottom: 0.8cqi;
+}
+
+.glass-note__body {
+  font-family: Georgia, 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+  font-size: clamp(0.45rem, 1.1cqi, 18px);
+  line-height: 1.65;
+  color: #2c2c3a;
+  font-style: italic;
+  letter-spacing: 0.2px;
+}
+
+/* =================================================================
+   GLASS FRAME — Frosted glass portrait paperweight (closing slide)
+   ================================================================= */
+.glass-frame {
+  position: absolute;
+  z-index: 4;
+  border-radius: 1.2cqi;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(14px) saturate(1.6);
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  border: 3px solid rgba(255, 255, 255, 0.28);
+  box-shadow:
+    0 6px 24px rgba(0, 0, 0, 0.25),
+    0 2px 6px rgba(0, 0, 0, 0.10),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45);
+  padding: 0.4cqi;
+}
+.glass-frame img {
+  width: 100%;
+  display: block;
+  border-radius: 0.9cqi;
+  object-fit: cover;
+}
+
+/* =================================================================
+   GLASS VIDEO — Frosted glass YouTube embed (closing slide)
+   ================================================================= */
+.glass-video {
+  position: absolute;
+  z-index: 3;
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(14px) saturate(1.6);
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 1.2cqi;
+  box-shadow:
+    0 6px 24px rgba(0, 0, 0, 0.18),
+    0 2px 6px rgba(0, 0, 0, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.5);
+  padding: 0.5cqi;
+  overflow: hidden;
+}
+
+.glass-video__aspect {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  border-radius: 0.8cqi;
+  overflow: hidden;
+}
+
+.glass-video__caption {
+  font-family: Georgia, 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+  font-size: clamp(0.3rem, 0.6cqi, 10px);
+  color: #2c2c3a;
+  opacity: 0.6;
+  padding: 0.3cqi 0.2cqi 0;
+  text-align: center;
+}
+
+/* YouTube thumbnail + play button */
+.yt-thumb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 110%;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+}
+.yt-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28%;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+}
+
+/* =================================================================
+   TLDR OVERVIEW STRIP — 5 equal panels in a row
+   ================================================================= */
+.tldr-strip {
+  position: absolute;
+  left: 3%; right: 3%; top: 7%; bottom: 7%;
+  display: flex;
+  gap: 1.2cqi;
+  z-index: 2;
+}
+
+.tldr-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6cqi;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.tldr-panel:hover {
+  transform: scale(1.03);
+}
+
+.tldr-panel__label {
+  font-weight: 800;
+  font-size: clamp(0.6rem, 1.5cqi, 26px);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.tldr-panel__thumb {
+  flex: 1;
+  width: 100%;
+  border-radius: 1cqi;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px) saturate(1.4);
+  -webkit-backdrop-filter: blur(10px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.12),
+    0 1px 4px rgba(0, 0, 0, 0.06),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+.tldr-panel__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.tldr-panel__title {
+  font-size: clamp(0.45rem, 1.1cqi, 18px);
+  font-weight: 700;
+  color: #1a1a2e;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.tldr-panel__desc {
+  font-size: clamp(0.35rem, 0.82cqi, 13px);
+  color: #555;
+  text-align: center;
+  line-height: 1.35;
+}
+
+/* =================================================================
+   PRINT STYLES — disable blur/shadows that cause dark lines in Chrome
+   Keep original 16:9 layout so container-query fonts stay correct.
+   ================================================================= */
+@page {
+  size: 13.333in 7.5in;   /* 16:9 widescreen, same as PowerPoint */
+  margin: 0;
+}
+
+@media print {
+  html {
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+    background: #fff;
+    overflow: visible;
+    scrollbar-width: auto;
+  }
+
+  body {
+    gap: 0;
+    padding: 0;
+  }
+
+  /* Preserve the 16:9 container so cqi-based fonts keep their size.
+     overflow:visible — hidden/clip cause Chrome to drop partially-clipped
+     elements (logo pill, portraits near edges). Keep visible. */
+  .slide {
+    scroll-snap-align: none;
+    width: 100vw;
+    aspect-ratio: 16 / 9;
+    overflow: visible;
+    page-break-after: always;
+    page-break-inside: avoid;
+    break-after: page;
+    break-inside: avoid;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Print-only fallback links (hidden on screen, shown in print) */
+  .print-link {
+    display: inline-flex !important;
+  }
+
+  /* Kill backdrop-filter on everything — safety net for any
+     remaining inline styles or future additions. */
+  .slide,
+  .slide * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Closing slide glass containers: strip visual effects that
+     render as grey rectangles in Chrome/iOS print. */
+  .glass-note,
+  .glass-frame,
+  .glass-video {
+    box-shadow: none !important;
+    border-radius: 4px !important;
+    overflow: visible !important;
+    border-color: rgba(200, 200, 210, 0.3) !important;
+  }
+  .glass-note {
+    background: rgba(255, 255, 255, 0.85) !important;
+  }
+  .glass-frame {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-width: 1px !important;
+  }
+  .glass-video {
+    background: rgba(255, 255, 255, 0.9) !important;
+  }
+  .glass-video__aspect {
+    border-radius: 4px !important;
+    overflow: visible !important;
+  }
+
+  /* Hero images + icon grid images + overlay panels: strip shadows */
+  .hero-image,
+  .icon-grid__img,
+  .overlay-panel {
+    box-shadow: none !important;
+  }
+  .overlay-panel img {
+    border-radius: 0 !important;
+  }
+
+  /* Frosted glass panels — white gradient with soft inner glow */
+  .glass-panel {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.78) 0%,
+      rgba(240, 240, 245, 0.68) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6),
+                inset 0 -1px 2px rgba(255, 255, 255, 0.15);
+  }
+
+  /* Glass links — frosted pill with visible text */
+  .glass-link {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.72) 0%,
+      rgba(245, 245, 250, 0.58) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    color: rgba(40, 40, 60, 0.85);
+  }
+  .glass-link--accent {
+    background: linear-gradient(
+      135deg,
+      rgba(138, 23, 204, 0.14) 0%,
+      rgba(138, 23, 204, 0.08) 100%
+    );
+    border: 1px solid rgba(138, 23, 204, 0.3);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    color: rgba(90, 10, 150, 0.9);
+  }
+
+  /* Chat bubbles — keep the glassy tint */
+  .chat-bubble {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+  .chat-bubble--left {
+    background: linear-gradient(
+      135deg,
+      rgba(210, 210, 220, 0.52) 0%,
+      rgba(195, 195, 210, 0.38) 100%
+    );
+    border: 1px solid rgba(180, 180, 195, 0.4);
+  }
+  .chat-bubble--right {
+    background: linear-gradient(
+      135deg,
+      rgba(0, 132, 255, 0.82) 0%,
+      rgba(0, 102, 230, 0.78) 100%
+    );
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  /* Portraits — frosted frame, opaque enough that Chrome print renders it.
+     Remove overflow:hidden + border-radius clipping that can eat images. */
+  .slide-portrait {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.82) 0%,
+      rgba(245, 245, 250, 0.72) 100%
+    ) !important;
+    border: 1px solid rgba(200, 200, 210, 0.5);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    z-index: 10 !important;
+    overflow: visible !important;
+    border-radius: 4px !important;
+  }
+
+  /* Ensure slide images always render in print */
+  .slide img {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Portrait images: strip object-fit:cover and border-radius clipping
+     that Chrome print drops. Plain block image always paints. */
+  .slide-portrait img {
+    object-fit: contain !important;
+    width: 100% !important;
+    height: auto !important;
+    border-radius: 4px !important;
+  }
+
+  /* Iframes (YouTube embeds) don't render in print. */
+  .slide iframe {
+    display: none !important;
+  }
+
+  /* Logo pill — frosted crimson */
+  .logo-pill--glass {
+    background: linear-gradient(
+      135deg,
+      rgba(147, 16, 54, 0.82) 0%,
+      rgba(147, 16, 54, 0.65) 100%
+    );
+    border: 1px solid rgba(255, 180, 200, 0.3);
+    box-shadow: inset 0 1px 1px rgba(255, 200, 210, 0.35);
+  }
+
+  /* Hide interactive-only UI */
+  .slide-nav-pill {
+    display: none !important;
+  }
+  .read-aloud-controls {
+    display: none !important;
+  }
+  .blendshape-debug {
+    display: none !important;
+  }
+
+  /* Last slide: no trailing blank page */
+  .slide:last-of-type {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  /* Logo pill: just disable transform so it renders at natural size.
+     The page boundary clips at 100% the same way overflow:hidden does
+     on screen, so the visible portion matches the screen version. */
+  .logo-pill {
+    transform: none;
+  }
+
+  /* Strip box-shadow and border-radius from ALL images inside slides —
+     catches inline styles (Network Effect, Bitter Lesson, etc.) that
+     class rules miss. border-radius on images causes grey hairline
+     artifacts in Chrome print, macOS Preview, and iOS PDF renderers. */
+  .slide img {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  /* Desk sketch: match slide background so contain letterbox areas
+     blend seamlessly instead of showing a hairline on iOS PDF. */
+  .desk-sketch {
+    background: #f5f0e6;
+  }
+
+  /* Float portraits / inline portraits / portrait rows / stacks:
+     strip box-shadow and simplify border-radius — iOS PDF renderers
+     show these as solid grey borders instead of soft shadows. */
+  .float-right--portrait,
+  .float-left--portrait,
+  .float-right--portrait-pair figure,
+  .portrait-row__item img,
+  .portrait-stack__item img,
+  .inline-portrait {
+    box-shadow: none !important;
+    border-radius: 4px !important;
+  }
+  .float-right--portrait,
+  .float-left--portrait {
+    overflow: visible !important;
+  }
+
+  /* Illustration images — strip border-radius clipping artifact */
+  .illust img {
+    border-radius: 0 !important;
+  }
+
+  /* TLDR overview thumbnails — strip shadow/border artifacts */
+  .tldr-panel__thumb {
+    box-shadow: none !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  }
+
+  /* Remove transitions / animations */
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

@@ -1,0 +1,138 @@
+/* ==========================================================================
+   Avatar Player - Styles for the 3D digital human overlay
+   ==========================================================================
+   Positioned within .hero-portrait, the avatar canvas replaces or overlays
+   the static colour-pencil author portrait when the GLB model is loaded.
+   ========================================================================== */
+
+/* Container: sits inside .hero-portrait, absolute-fills it */
+.avatar-container {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+/* Visible once the avatar has loaded */
+.avatar-container.loaded {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* WebGL canvas */
+.avatar-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  /* Transparent background so the hero-portrait glass effect shows through */
+  background: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   Loading spinner
+   -------------------------------------------------------------------------- */
+.avatar-loading-spinner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 3;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.avatar-loading-spinner.hidden {
+  opacity: 0;
+}
+
+.avatar-spinner-ring {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(255, 255, 255, 0.15);
+  border-top-color: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  animation: avatar-spin 0.8s linear infinite;
+}
+
+.avatar-spinner-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@keyframes avatar-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* --------------------------------------------------------------------------
+   Ensure .hero-portrait has relative positioning for the overlay
+   -------------------------------------------------------------------------- */
+.hero-portrait {
+  position: relative;
+}
+
+/* When avatar is active, dim the static portrait image */
+.hero-portrait.avatar-active > img {
+  opacity: 0;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive sizing
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .avatar-container {
+    border-radius: 12px;
+  }
+
+  .avatar-canvas {
+    border-radius: 12px;
+  }
+
+  .avatar-spinner-ring {
+    width: 28px;
+    height: 28px;
+    border-width: 2px;
+  }
+
+  .avatar-spinner-text {
+    font-size: 0.65rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion preference: skip animations
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .avatar-container {
+    transition: none;
+  }
+
+  .avatar-loading-spinner {
+    transition: none;
+  }
+
+  .avatar-spinner-ring {
+    animation: none;
+    border-top-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .hero-portrait.avatar-active > img {
+    transition: none;
+  }
+}

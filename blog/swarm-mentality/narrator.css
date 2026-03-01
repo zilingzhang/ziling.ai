@@ -1,0 +1,533 @@
+/* ==========================================================================
+   Narrator Panel — Personality-driven slide narration
+   Frosted glass aesthetic matching the slide deck's glass-panel style.
+   Positioned at bottom-left, complementing the slide-nav pill at right.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Panel container
+   -------------------------------------------------------------------------- */
+.narrator-panel {
+  width: clamp(200px, 22vw, 320px);
+  padding: 10px 14px 12px;
+  border-radius: 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(20, 20, 30, 0.72) 0%,
+    rgba(20, 20, 30, 0.52) 100%
+  );
+  backdrop-filter: blur(20px) saturate(1.8);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.05);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: rgba(255, 255, 255, 0.85);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  /* Hidden by default — toggled via .visible */
+  display: none;
+}
+
+.narrator-panel.visible {
+  display: flex;
+}
+
+/* --------------------------------------------------------------------------
+   Header row
+   -------------------------------------------------------------------------- */
+.narrator-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.narrator-title {
+  font-size: clamp(0.55rem, 0.8vw, 0.75rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.45);
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Voice selector
+   -------------------------------------------------------------------------- */
+.narrator-voice-select {
+  flex: 1;
+  min-width: 0;
+  padding: 3px 6px;
+  font-size: clamp(0.5rem, 0.7vw, 0.65rem);
+  font-family: inherit;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='rgba(255,255,255,0.5)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+  padding-right: 20px;
+}
+
+.narrator-voice-select:focus {
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.08);
+}
+
+.narrator-voice-select option {
+  background: #1a1a2e;
+  color: #e0e0e0;
+}
+
+/* --------------------------------------------------------------------------
+   Personality chips
+   -------------------------------------------------------------------------- */
+.narrator-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.narrator-chip {
+  padding: 3px 10px;
+  font-size: clamp(0.45rem, 0.65vw, 0.6rem);
+  font-family: inherit;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.narrator-chip:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.narrator-chip.active {
+  color: #fff;
+  background: color-mix(in srgb, var(--chip-accent) 25%, transparent);
+  border-color: var(--chip-accent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--chip-accent) 30%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+   Custom personality input
+   -------------------------------------------------------------------------- */
+.narrator-custom-input {
+  width: 100%;
+  padding: 5px 8px;
+  font-size: clamp(0.5rem, 0.65vw, 0.6rem);
+  font-family: inherit;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  outline: none;
+}
+
+.narrator-custom-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+  font-style: italic;
+}
+
+.narrator-custom-input:focus {
+  border-color: rgba(167, 139, 250, 0.5);
+  box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.15);
+}
+
+/* --------------------------------------------------------------------------
+   Preview text (shown after LLM rewrite)
+   -------------------------------------------------------------------------- */
+.narrator-preview {
+  max-height: 80px;
+  overflow-y: auto;
+  font-size: clamp(0.5rem, 0.65vw, 0.6rem);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+.narrator-preview::-webkit-scrollbar { width: 3px; }
+.narrator-preview::-webkit-scrollbar-track { background: transparent; }
+.narrator-preview::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Narrate button
+   -------------------------------------------------------------------------- */
+.narrator-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 7px 12px;
+  font-size: clamp(0.6rem, 0.8vw, 0.75rem);
+  font-family: inherit;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  background: linear-gradient(
+    135deg,
+    rgba(147, 16, 54, 0.55) 0%,
+    rgba(147, 16, 54, 0.35) 100%
+  );
+  border: 1px solid rgba(255, 180, 200, 0.2);
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow:
+    0 2px 8px rgba(147, 16, 54, 0.2),
+    inset 0 1px 1px rgba(255, 200, 210, 0.2);
+}
+
+.narrator-btn:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(147, 16, 54, 0.7) 0%,
+    rgba(147, 16, 54, 0.5) 100%
+  );
+  border-color: rgba(255, 180, 200, 0.35);
+  box-shadow:
+    0 4px 16px rgba(147, 16, 54, 0.3),
+    inset 0 1px 1px rgba(255, 200, 210, 0.3);
+  transform: translateY(-1px);
+}
+
+.narrator-btn:active {
+  transform: translateY(0);
+}
+
+/* Active / playing state */
+.narrator-btn--active {
+  background: linear-gradient(
+    135deg,
+    rgba(231, 76, 60, 0.55) 0%,
+    rgba(231, 76, 60, 0.35) 100%
+  );
+  border-color: rgba(231, 76, 60, 0.4);
+  animation: narrator-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes narrator-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.narrator-btn svg {
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Fullscreen toggle — standalone liquid glass pill
+   -------------------------------------------------------------------------- */
+.fullscreen-toggle {
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.25) 100%);
+  backdrop-filter: blur(16px) saturate(200%);
+  -webkit-backdrop-filter: blur(16px) saturate(200%);
+  color: #2c2c2c;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.fullscreen-toggle:hover {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.35) 100%);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.fullscreen-toggle.active {
+  background: linear-gradient(135deg,
+    rgba(59, 130, 246, 0.3) 0%,
+    rgba(59, 130, 246, 0.15) 100%);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #1d4ed8;
+}
+
+/* --------------------------------------------------------------------------
+   Toggle button in the button group (mirrors .bs-debug-toggle)
+   -------------------------------------------------------------------------- */
+.narrator-toggle {
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.25) 100%);
+  backdrop-filter: blur(16px) saturate(200%);
+  -webkit-backdrop-filter: blur(16px) saturate(200%);
+  color: #2c2c2c;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  /* Always visible */
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.narrator-toggle:hover {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.35) 100%);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.narrator-toggle.active {
+  background: linear-gradient(135deg,
+    rgba(147, 16, 54, 0.3) 0%,
+    rgba(147, 16, 54, 0.15) 100%);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #8b1a3a;
+}
+
+/* ==========================================================================
+   Pill Wrapper — pill-to-panel expand layout for DH + Narrator
+   Top-right horizontal row; clicking a pill expands it into its panel,
+   pushing the other pill to the left.
+   ========================================================================== */
+
+/* Override read-aloud-controls: horizontal row instead of column */
+.read-aloud-controls {
+  flex-direction: row !important;
+  align-items: flex-start !important;
+}
+
+/* Hide the now-unused button-group (hidden buttons only) */
+.read-aloud-controls > .button-group {
+  display: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   Pill wrapper base (shared by DH and Narrator)
+   -------------------------------------------------------------------------- */
+.pill-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  border-radius: 50px;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.25) 100%);
+  backdrop-filter: blur(16px) saturate(200%);
+  -webkit-backdrop-filter: blur(16px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  transition:
+    border-radius 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+  cursor: pointer;
+}
+
+.pill-wrapper:hover:not(.expanded) {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.35) 100%);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.pill-wrapper.expanded {
+  border-radius: 16px;
+  cursor: default;
+}
+
+/* --------------------------------------------------------------------------
+   Toggle buttons lose their own glass when inside wrapper
+   -------------------------------------------------------------------------- */
+.pill-wrapper .bs-debug-toggle,
+.pill-wrapper .narrator-toggle {
+  background: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Animated body container (holds the panel; clips during transition)
+   -------------------------------------------------------------------------- */
+.pill-wrapper__body {
+  max-height: 0;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    max-width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.25s ease;
+}
+
+.pill-wrapper.expanded .pill-wrapper__body {
+  max-height: 1200px;
+  max-width: 600px;
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Panels lose their own glass when inside wrapper (wrapper provides it)
+   -------------------------------------------------------------------------- */
+.pill-wrapper .bs-debug-panel {
+  display: block;
+  background: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.pill-wrapper .narrator-panel {
+  display: flex;
+  background: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+/* --------------------------------------------------------------------------
+   DH wrapper — expanded state (light glass, matching original panel)
+   -------------------------------------------------------------------------- */
+.pill-wrapper--dh.expanded {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.3) 100%);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+
+.pill-wrapper--dh.expanded .bs-debug-toggle {
+  color: #1a7a42;
+}
+
+/* --------------------------------------------------------------------------
+   Narrator wrapper — expanded state (dark glass, matching original panel)
+   -------------------------------------------------------------------------- */
+.pill-wrapper--narrator.expanded {
+  background: linear-gradient(135deg,
+    rgba(20, 20, 30, 0.72) 0%,
+    rgba(20, 20, 30, 0.52) 100%);
+  backdrop-filter: blur(20px) saturate(1.8);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.05);
+}
+
+.pill-wrapper--narrator.expanded .narrator-toggle {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.pill-wrapper--narrator .narrator-toggle.active {
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .narrator-panel {
+    width: clamp(170px, 45vw, 260px);
+    padding: 8px 10px 10px;
+    gap: 6px;
+  }
+
+  .narrator-chip {
+    padding: 2px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .narrator-panel {
+    width: clamp(170px, 55vw, 260px);
+  }
+
+  .narrator-chips {
+    gap: 3px;
+  }
+
+  .read-aloud-controls {
+    gap: 0.35rem !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .narrator-panel {
+    transition: none;
+  }
+
+  .narrator-btn--active {
+    animation: none;
+  }
+
+  .narrator-chip {
+    transition: none;
+  }
+
+  .narrator-btn {
+    transition: none;
+  }
+
+  .pill-wrapper {
+    transition: none;
+  }
+
+  .pill-wrapper__body {
+    transition: none;
+  }
+}

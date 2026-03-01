@@ -1,0 +1,296 @@
+/* Read Aloud Feature Styles */
+
+.read-aloud-button {
+  position: relative;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.25) 100%);
+  backdrop-filter: blur(16px) saturate(200%);
+  -webkit-backdrop-filter: blur(16px) saturate(200%);
+  color: #2c2c2c;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow:
+    0 2px 8px rgba(122, 61, 92, 0.1),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s;
+}
+
+.read-aloud-button:hover {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.35) 100%);
+  transform: translateY(-2px);
+  box-shadow:
+    0 4px 16px rgba(122, 61, 92, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.read-aloud-button.playing {
+  background: linear-gradient(135deg,
+    rgba(231, 76, 60, 0.35) 0%,
+    rgba(231, 76, 60, 0.2) 100%);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #8b2f23;
+}
+
+.read-aloud-button.playing:hover {
+  background: linear-gradient(135deg,
+    rgba(231, 76, 60, 0.45) 0%,
+    rgba(231, 76, 60, 0.3) 100%);
+}
+
+.read-aloud-button.loading {
+  animation: ra-pulse 1.2s ease-in-out infinite;
+  pointer-events: auto;
+}
+
+@keyframes ra-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@media (max-width: 768px) {
+  .read-aloud-button {
+    bottom: 1rem;
+    right: 1rem;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+  }
+}
+
+.article p,
+.article h2,
+.article h3,
+.article blockquote,
+.article ul,
+.article ol {
+  position: relative;
+  padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+  margin-left: -1.5rem;
+  margin-right: -0.5rem;
+  border-radius: 4px;
+  border-left: 4px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.article p.reading-active,
+.article h2.reading-active,
+.article h3.reading-active,
+.article blockquote.reading-active,
+.article ul.reading-active,
+.article ol.reading-active {
+  background: rgba(139, 69, 103, 0.15);
+  border-left-color: var(--accent-article);
+}
+
+.paragraph-play-button {
+  position: absolute;
+  left: -40px;
+  top: 0.25rem;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: #d0d0d0;
+  border-radius: 50%;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  opacity: 0.7;
+  padding: 0;
+}
+
+.paragraph-play-button:hover {
+  background: #a0a0a0;
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.paragraph-play-button svg {
+  width: 14px;
+  height: 14px;
+  fill: white;
+  margin-left: 2px;
+}
+
+.read-aloud-controls {
+  position: fixed;
+  top: 1rem;
+  right: 1.5rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  /* Prevent overflow when browser is half-width */
+  max-width: calc(100vw - 2rem);
+}
+
+/* Button group first (top) when controls are at top-right */
+.read-aloud-controls .button-group {
+  order: -1;
+}
+
+.voice-selector {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.3) 100%);
+  backdrop-filter: blur(16px) saturate(200%);
+  -webkit-backdrop-filter: blur(16px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  display: none;
+  min-width: 200px;
+}
+
+.voice-selector.show {
+  display: block;
+}
+
+.voice-selector select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #2c2c2c;
+}
+
+.voice-selector select:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+.voice-selector label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2c2c2c;
+  margin-bottom: 0.25rem;
+}
+
+.a2f-status {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #999;
+  flex-shrink: 0;
+  transition: background 0.4s;
+}
+
+.a2f-status.connected {
+  background: #4caf50;
+  box-shadow: 0 0 4px rgba(76, 175, 80, 0.5);
+}
+
+.a2f-status.disconnected {
+  background: #ff9800;
+  box-shadow: 0 0 4px rgba(255, 152, 0, 0.4);
+}
+
+.a2f-status-label {
+  font-size: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(0, 0, 0, 0.35);
+  white-space: nowrap;
+  transition: color 0.4s;
+}
+
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.settings-button {
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.25) 100%);
+  backdrop-filter: blur(16px) saturate(200%);
+  -webkit-backdrop-filter: blur(16px) saturate(200%);
+  color: #2c2c2c;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow:
+    0 2px 8px rgba(122, 61, 92, 0.1),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(10px) scale(0.95);
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.button-group:hover .settings-button,
+.settings-button.active {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+
+.settings-button:hover {
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.35) 100%);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.settings-button.active {
+  background: linear-gradient(135deg,
+    rgba(139, 69, 103, 0.4) 0%,
+    rgba(139, 69, 103, 0.25) 100%);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .read-aloud-controls {
+    top: 0.5rem;
+    right: 0.5rem;
+    max-width: calc(100vw - 1rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .button-group {
+    gap: 0.35rem;
+  }
+
+  .read-aloud-button {
+    padding: 0.65rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .settings-button {
+    padding: 0.65rem 1rem;
+    font-size: 0.85rem;
+  }
+}
