@@ -839,11 +839,9 @@
     var signal = abortController.signal;
     updateUI();
 
-    // Show avatar
-    ensureAvatarVisible();
-
     var avatarPlayer = window.readAloudAvatarPlayer;
     if (avatarPlayer) {
+      ensureAvatarVisible();
       avatarPlayer.setAhemPose(true);
     }
 
