@@ -17,7 +17,7 @@ Personal portfolio and blog site for Ziling Zhang. Static site (vanilla HTML/CSS
   - `narrator.js` -- LLM-driven personality narration + Kokoro TTS (browser-based via Web Worker)
   - `kokoro-worker.js` -- Web Worker for Kokoro WASM TTS engine (~92MB model, loaded on demand)
   - `liquid-glass-slides.css` -- Frosted glass panel styling
-  - `swarm-mentality.md` -- Full content source (5 acts + epilogue)
+  - `swarm-mentality.md` -- Full content source (4 acts + epilogue)
 - `cv/latex/` -- LaTeX resume (`mmayer.tex` using `altacv.cls` v1.7.4)
 - `designs/` -- Design iteration prototypes (gitignored)
 

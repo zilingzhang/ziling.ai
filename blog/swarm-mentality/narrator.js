@@ -283,6 +283,29 @@
     var fullSystem = systemParts.join('\n\n');
     var userMessage = 'Narrate this slide content:\n\n' + text;
 
+    // --- Chrome Prompt API (free, on-device, supports systemPrompt) ---
+    if (window.ai && window.ai.languageModel) {
+      return window.ai.languageModel.create({
+        systemPrompt: fullSystem
+      }).then(function (session) {
+        if (signal) {
+          signal.addEventListener('abort', function () { session.destroy(); });
+        }
+        return session.prompt(userMessage).then(function (result) {
+          session.destroy();
+          return result;
+        });
+      }).catch(function (e) {
+        console.warn('[Narrator] Chrome Prompt API unavailable:', e.message);
+        return rewriteFallbackRewriter(fullSystem, userMessage, signal);
+      });
+    }
+
+    return rewriteFallbackRewriter(fullSystem, userMessage, signal);
+  }
+
+  /** Chrome Rewriter API fallback, then server LLM, then passthrough. */
+  function rewriteFallbackRewriter(fullSystem, userMessage, signal) {
     // --- Chrome Rewriter API (free, on-device) ---
     if (window.ai && window.ai.rewriter) {
       return window.ai.rewriter.create({
@@ -299,29 +322,6 @@
         });
       }).catch(function (e) {
         console.warn('[Narrator] Chrome Rewriter unavailable:', e.message);
-        return rewriteFallbackPromptAPI(fullSystem, userMessage, signal);
-      });
-    }
-
-    return rewriteFallbackPromptAPI(fullSystem, userMessage, signal);
-  }
-
-  /** Chrome Prompt API fallback, then server LLM, then passthrough. */
-  function rewriteFallbackPromptAPI(fullSystem, userMessage, signal) {
-    // --- Chrome Prompt API (free, on-device) ---
-    if (window.ai && window.ai.languageModel) {
-      return window.ai.languageModel.create({
-        systemPrompt: fullSystem
-      }).then(function (session) {
-        if (signal) {
-          signal.addEventListener('abort', function () { session.destroy(); });
-        }
-        return session.prompt(userMessage).then(function (result) {
-          session.destroy();
-          return result;
-        });
-      }).catch(function (e) {
-        console.warn('[Narrator] Chrome Prompt API unavailable:', e.message);
         return rewriteFallbackServerLLM(fullSystem, userMessage, signal);
       });
     }
