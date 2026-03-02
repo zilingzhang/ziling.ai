@@ -1,94 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Weekend Projects — Ziling Zhang</title>
-<meta name="description" content="Weekend projects by Ziling Zhang — shipping every weekend.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>Z</text></svg>">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekend Projects — Ziling Zhang</title>
+  <meta name="description" content="Weekend projects by Ziling Zhang — shipping every weekend.">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>Z</text></svg>">
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<div class="desk">
-  <aside class="sidebar" role="banner">
-    <div class="sidebar-inner">
-      <div class="portrait">
-        <img src="blog/swarm-mentality/images/ziling_color_pencil.png"
-             alt="Ziling Zhang — color pencil portrait">
+  <div class="desk">
+    <aside class="sidebar" role="banner">
+      <div class="sidebar-inner">
+        <div class="portrait">
+          <img src="blog/swarm-mentality/images/ziling_color_pencil.png" alt="Ziling Zhang — color pencil portrait">
+        </div>
+
+        <h1 class="sidebar-name">Ziling Zhang</h1>
+
+        <div class="sidebar-titles">
+          <span>Data Scientist</span>
+          <span>Edge AI Roboticist</span>
+          <span>Master Inventor</span>
+          <span>Translator</span>
+        </div>
+
+        <div class="sidebar-divider" role="separator"></div>
+
+        <nav class="sidebar-nav" aria-label="Page sections">
+          <a href="index.html">Home</a>
+        </nav>
+
+        <div class="sidebar-divider" role="separator"></div>
+
+        <nav class="sidebar-links" aria-label="External links">
+          <a href="cv/ziling_zhang_cv.pdf">CV</a>
+          <a href="https://linkedin.com/in/zilingz" target="_blank" rel="noopener">LinkedIn</a>
+        </nav>
       </div>
+    </aside>
 
-      <h1 class="sidebar-name">Ziling Zhang</h1>
+    <main class="content">
+      <div class="desk-grid" style="grid-template-columns: 1fr;">
+        <article class="paper paper-projects" aria-label="Weekend Projects">
+          <h2 class="paper-title">Weekend Projects</h2>
+          <img class="project-title-img" alt="Weekend projects desk sketch" src="weekend-projects-banner.png">
+          <p class="paper-subtitle">shipping every weekend since my 9.5 birthday</p>
 
-      <div class="sidebar-titles">
-        <span>Data Scientist</span>
-        <span>Edge AI Roboticist</span>
-        <span>Master Inventor</span>
-        <span>Translator</span>
-      </div>
-
-      <div class="sidebar-divider" role="separator"></div>
-
-      <nav class="sidebar-nav" aria-label="Page sections">
-        <a href="index.html">Home</a>
-      </nav>
-
-      <div class="sidebar-divider" role="separator"></div>
-
-      <nav class="sidebar-links" aria-label="External links">
-        <a href="cv/ziling_zhang_cv.pdf">CV</a>
-        <a href="https://linkedin.com/in/zilingz" target="_blank" rel="noopener">LinkedIn</a>
-      </nav>
-    </div>
-  </aside>
-
-  <main class="content">
-    <div class="desk-grid" style="grid-template-columns: 1fr;">
-      <article class="paper paper-projects" aria-label="Weekend Projects">
-        <h2 class="paper-title">Weekend Projects</h2>
-        <img class="project-title-img"
-             alt="Weekend projects desk sketch"
-             src="weekend-projects-banner.png">
-        <p class="paper-subtitle">shipping every weekend since my 9.5 birthday</p>
-
-        <div class="project-entry">
-          <div class="project-week">Week 2</div>
-          <div class="project-name">
-            <a href="blog/swarm-mentality/">ziling.ai &amp; Swarm Mentality</a>
+          <div class="project-entry">
+            <div class="project-week">Week 2</div>
+            <div class="project-name">
+              <a href="blog/swarm-mentality/">ziling.ai &amp; Swarm Mentality</a>
+            </div>
+            <div class="project-desc">Personal site and republishing of an internal AI presentation</div>
           </div>
-          <div class="project-desc">Personal site and republishing of an internal AI presentation</div>
-        </div>
 
-        <div class="project-entry">
-          <div class="project-week">Week 1</div>
-          <div class="project-name"><a href="index.html#clawd">Clawd Animations</a></div>
-          <div class="project-desc">207 procedural animations for a 3D character</div>
-        </div>
-      </article>
-    </div>
-  </main>
-</div>
+          <div class="project-entry">
+            <div class="project-week">Week 1</div>
+            <div class="project-name"><a href="index.html#clawd">Clawd Animations</a></div>
+            <div class="project-desc">207 procedural animations for a 3D character</div>
+          </div>
+        </article>
+      </div>
+    </main>
+  </div>
 
-<script>
-(function () {
-  'use strict';
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var revealEls = document.querySelectorAll('.paper');
-  if (reduced) {
-    revealEls.forEach(function (el) { el.classList.add('visible'); });
-  } else {
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { rootMargin: '0px 0px -40px 0px', threshold: 0.1 });
-    revealEls.forEach(function (el) { observer.observe(el); });
-  }
-})();
-</script>
+  <script>
+    (function () {
+      'use strict';
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var revealEls = document.querySelectorAll('.paper');
+      if (reduced) {
+        revealEls.forEach(function (el) { el.classList.add('visible'); });
+      } else {
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { rootMargin: '0px 0px -40px 0px', threshold: 0.1 });
+        revealEls.forEach(function (el) { observer.observe(el); });
+      }
+    })();
+  </script>
 
 </body>
+
 </html>
