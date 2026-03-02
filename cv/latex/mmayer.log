@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.3.1)  2 MAR 2026 14:30
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.3.1)  2 MAR 2026 14:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1791,7 +1791,7 @@ Package logreq Info: Writing requests to 'mmayer.run.xml'.
 Here is how much of TeX's memory you used:
  43790 strings out of 467533
  881771 string characters out of 5419496
- 1662324 words of memory out of 5000000
+ 1663324 words of memory out of 5000000
  72052 multiletter control sequences out of 15000+600000
  922450 words of font info for 82 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1804,7 +1804,7 @@ ts/type1/public/fontawesome5/FontAwesome5Free-Solid.pfb></usr/local/texlive/202
 exmf-dist/fonts/type1/typoland/lato/Lato-Italic.pfb></usr/local/texlive/2025/te
 xmf-dist/fonts/type1/typoland/lato/Lato-Regular.pfb></usr/local/texlive/2025/te
 xmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb>
-Output written on mmayer.pdf (2 pages, 202654 bytes).
+Output written on mmayer.pdf (2 pages, 202766 bytes).
 PDF statistics:
  78 PDF objects out of 1000 (max. 8388607)
  3 named destinations out of 1000 (max. 500000)
