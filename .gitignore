@@ -4,3 +4,5 @@ node_modules/
 .claude/
 generated_imgs/
 designs/
+.mcp.json
+.playwright-mcp

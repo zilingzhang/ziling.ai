@@ -1,0 +1,343 @@
+%%%%%%%%%%%%%%%%%
+% This is an sample CV template created using altacv.cls
+% (v1.6.5, 3 Nov 2022) written by LianTze Lim (liantze@gmail.com), based on the
+% CV created by BusinessInsider at http://www.businessinsider.my/a-sample-resume-for-marissa-mayer-2016-7/?r=US&IR=T
+%
+%% It may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2003/12/01 or later.
+%%%%%%%%%%%%%%%%
+
+%% Use the "normalphoto" option if you want a normal photo instead of cropped to a circle
+% \documentclass[10pt,a4paper,normalphoto]{altacv}
+
+\documentclass[10pt,letter,ragged2e,withhyper]{altacv}
+
+%% AltaCV uses the fontawesome5 package.
+%% See http://texdoc.net/pkg/fontawesome5 for full list of symbols.
+
+% Change the page layout if you need to
+\geometry{left=1cm,right=1cm,top=1cm,bottom=1cm,columnsep=0.8cm}
+
+% The paracol package lets you typeset columns of text in parallel
+\usepackage{paracol}
+\usepackage{indentfirst}
+
+% Change the font if you want to, depending on whether
+% you're using pdflatex or xelatex/lualatex
+\iftutex
+  % If using xelatex or lualatex:
+  \setmainfont{Lato}
+\else
+  % If using pdflatex:
+  \usepackage[default]{lato}
+\fi
+
+% Change the colours if you want to
+% \definecolor{VividPurple}{HTML}{906397}
+\definecolor{VividPurple}{HTML}{906397}
+\definecolor{SlateGrey}{HTML}{2E2E2E}
+\definecolor{LightGrey}{HTML}{444444}
+% \colorlet{name}{black}
+% \colorlet{tagline}{PastelRed}
+\colorlet{heading}{VividPurple}
+\colorlet{headingrule}{VividPurple}
+% \colorlet{subheading}{PastelRed}
+\colorlet{accent}{VividPurple}
+\colorlet{emphasis}{SlateGrey}
+\colorlet{body}{LightGrey}
+
+% Change some fonts, if necessary
+% \renewcommand{\namefont}{\Huge\rmfamily\bfseries}
+% \renewcommand{\personalinfofont}{\footnotesize}
+% \renewcommand{\cvsectionfont}{\LARGE\rmfamily\bfseries}
+% \renewcommand{\cvsubsectionfont}{\large\bfseries}
+
+% Change the bullets for itemize and rating marker
+% for \cvskill if you want to
+\renewcommand{\itemmarker}{{\small\textbullet}}
+\renewcommand{\ratingmarker}{\faCircle}
+
+%% Use (and optionally edit if necessary) this .tex if you
+%% want to use an author-year reference style like APA(6)
+%% for your publication list
+% \input{pubs-authoryear}
+
+%% Use (and optionally edit if necessary) this .tex if you
+%% want an originally numerical reference style like IEEE
+%% for your publication list
+\input{pubs-num}
+
+%% sample.bib contains your publications
+\addbibresource{sample.bib}
+
+\begin{document}
+% \photoR{2cm}{flushline.rotated/}
+\name{Ziling Zhang}
+\tagline{Gen AI Architect / Data Scientist / Roboticist}
+% Cropped to square from 
+% \photoL{2cm}{Yacht_High,Suitcase_High}
+\NewInfoField{residency}{\faGlobe}
+\personalinfo{%
+  % Not all of these are required!
+  % You can add your own with \printinfo{symbol}{detail}
+  \email{zhang.ziling@gmail.com}
+  \phone{720-939-9292}
+  \mailaddress{8792 Flattop St, Arvada, CO 80007}
+  % \location{Boulder, CO}
+  \linkedin{zilingz}
+  \residency{US Citizen}
+
+%   \github{github.com/mmayer} % I'm just making this up though.
+%   \orcid{0000-0000-0000-0000} % Obviously making this up too.
+  %% You can add your own arbitrary detail with
+  %% \printinfo{symbol}{detail}[optional hyperlink prefix]
+  % \printinfo{\faPaw}{Hey ho!}
+  %% Or you can declare your own field with
+  %% \NewInfoFiled{fieldname}{symbol}[optional hyperlink prefix] and use it:
+  % \NewInfoField{gitlab}{\faGitlab}[https://gitlab.com/]
+  % \gitlab{your_id}
+	%%
+  %% For services and platforms like Mastodon where there isn't a
+  %% straightforward relation between the user ID/nickname and the hyperlink,
+  %% you can use \printinfo directly e.g.
+  % \printinfo{\faMastodon}{@username@instace}[https://instance.url/@username]
+  %% But if you absolutely want to create new dedicated info fields for
+  %% such platforms, then use \NewInfoField* with a star:
+  % \NewInfoField*{mastodon}{\faMastodon}
+  %% then you can use \mastodon, with TWO arguments where the 2nd argument is
+  %% the full hyperlink.
+  % \mastodon{@username@instance}{https://instance.url/@username}
+}
+
+\makecvheader
+
+%% Depending on your tastes, you may want to make fonts of itemize environments slightly smaller
+\AtBeginEnvironment{itemize}{\small}
+
+%% Set the left/right column width ratio to 6:4.
+\columnratio{0.7}
+
+% Start a 2-column paracol. Both the left and right columns will automatically
+% break across pages if things get too long.
+\begin{paracol}{2}
+
+\cvsection{Experience}
+
+\cvevent{\textbf{Advisory Data Scientist}}{Automation Technical Implementation Group | Ricoh Graphic Communications}{Aug 2022 -- present}{Boulder, CO}
+\begin{itemize}[leftmargin=1.8em, itemindent=-1.8em]
+\item[] \faCode ~Lead AI Coding Assist pilot with Claude Code for 280+ builders. Architect AWS Bedrock cloud infrastructure with SSO auth, per-user cost tracking, OpenTelemetry observability.
+\item[] \faRocket ~Architect enterprise Gen AI transformation. Built Grace AI platform serving 280+ builders with Claude on AWS Bedrock, Docker microservices (Open WebUI, LiteLLM, vLLM), MCP tool integrations (Jira, Confluence, GitLab).
+\item[] \faServer ~Manage NVIDIA GH200$\times$4 GPU cluster serving local LLMs, embedding, reranking, and image generation models, powering enterprise AI agents across multiple departments.
+\item[] \faServer ~Manage NVIDIA RTX Pro 6000 Blackwell cluster for simulation-based robotics and computer vision software CI pipelines.
+\item[] \faRobot ~Prototype Universal Robot (UR20) book palletizer. ROS2, computer vision, Cognex barcode scanner, FastAPI backend, React/Three.js digital twin (Cobot UI).
+\item[] \faMicrochip ~Hands-on expertise across NVIDIA's three-computer paradigm: GH200 (datacenter AI), RTX Pro 6000 Blackwell (Omniverse simulation), Jetson (edge robotics).
+\item[] \faIndustry ~Colorado School of Mines field session: Nvidia Cosmos robotic simulation data generation, Omniverse ray traced printshop digital twin.
+\item[] \faChalkboardTeacher ~Design Agentic Coding training programs. Hackathon judge, CU Boulder.
+\item[] \faUpload ~Develop serverless ETL pipeline aggregating printer/sensor timeseries data. AWS Athena, Lambda. Supporting predictive maintenance inference with SageMaker serverless.
+\end{itemize}
+
+\divider
+
+\cvevent{\textbf{Staff/Advisory Imaging Science Engineer}}{Boulder Development Section | Ricoh Graphic Communications}{Aug 2019 -- Aug 2022}{Boulder, CO}
+
+\begin{itemize}[leftmargin=1.8em, itemindent=-1.8em]
+\item[] \textbf{~~~~~~~Computer Vision + Automation R\&D for Continuous Feed Industrial Printer}
+\item[] \faConnectdevelop ~Detect nozzle defect by training a semantic segmentation Deeplab v3+ neural network, accelerate with Nvidia TensorRT int8 quantization, achieve 37x speedup.
+\item[] \faBarcode       ~Prototype nozzle uniformity algorithms, accelerate with SIMD and threading, achieve 40x speedup. Intel MKL/TBB, OpenCV, Visual Profiler, Concurrency Visualizer.
+\item[] \faRocket ~Architect image processing pipeline that can withstand 7GBytes/s scanner data, \break perform realtime defect detection and compensation to achieve superior print quality.
+\item[] \faCode ~Standardize the team's coding practice, enforce modern C++ RAII style, C++ Core Guidelines, Google python style / pylint, modularize code into testable liblets. 
+\item[] \faGitlab ~Setup CMake, google test, GitLab CI, docker runners for high velocity iteration.
+\item[] \faBalanceScale ~Filed 28 patents, granted 10, achieved Master Inventor title, fastest in Ricoh Boulder.
+\end{itemize}
+
+\divider
+
+\cvevent{\textbf{Robotics Research Assistant}}{Human Centered Robotics Lab | Colorado School of Mines}{Aug 2018 -- Dec 2019}{Golden, CO}
+\begin{itemize}[leftmargin=1.8em, itemindent=-1.8em] 
+\item[] \faMap ~DARPA subteranean challenge Mines team, SLAM LiDAR 3D mapping ROS node.
+\item[] \faCar ~Toyota InfoTechnology Center, V2X IoT multi-vehicle collaborative perception.
+\item[] \faApple ~Metcalf Archaeology, long term place recognition AR iOS app (Swift, OpenCV C++).
+\item[] \faAndroid ~Kinect + FLIR lipton sensor fusion, forehead temperature measurement TurtleBot.
+\end{itemize}
+\newpage
+
+\cvevent{\textbf{Scientific Translator (English -> Chinese)}}{Freelance Contracts}{Jan 2012 -- Aug 2018}{Remote}
+
+\begin{itemize}[leftmargin=1.8em, itemindent=-1.8em] 
+\item[] \faQuoteLeft ~(NetEase Inc.) Translate OpenCourseWare, Coursera lectures subtitles, 1.87 million words.
+\item[] \faLanguage ~(Yeeyan.org) Book translation, Net Smart by Howard Rheingold, MIT press.
+\end{itemize}
+
+\divider
+\cvevent{\textbf{\break Software Developer}}{JindianTuteng Talent information solution Inc.}{Oct 2011 -- June 2012}{Guangzhou, China}
+\begin{itemize}[leftmargin=1.8em, itemindent=-1.8em] 
+    \item[] \faBtc ~Rule based transaction fraud detection for Foreign Exchange Management. \break Java, J2EE, JSP, IBM WebSphere, IBM DB2.
+\end{itemize}
+
+
+% \divider
+
+% \cvevent{Product Engineer}{Google}{23 June 1999 -- 2001}{Palo Alto, CA}
+
+% \begin{itemize}
+% \item Joined the company as employe \#20 and female employee \#1
+% \item Developed targeted advertisement in order to use user's search queries and show them related ads
+% \end{itemize}
+
+
+
+% use ONLY \newpage if you want to force a page break for
+% ONLY the currentc column
+\newpage
+
+% \cvsection{Publications}
+
+% %% Specify your last name(s) and first name(s) as given in the .bib to automatically bold your own name in the publications list.
+% %% One caveat: You need to write \bibnamedelima where there's a space in your name for this to work properly; or write \bibnamedelimi if you use initials in the .bib
+% %% You can specify multiple names, especially if you have changed your name or if you need to highlight multiple authors.
+% \mynames{Lim/Lian\bibnamedelima Tze,
+%   Wong/Lian\bibnamedelima Tze,
+%   Lim/Tracy,
+%   Lim/L.\bibnamedelimi T.}
+% %% MAKE SURE THERE IS NO SPACE AFTER THE FINAL NAME IN YOUR \mynames LIST
+
+% \nocite{*}
+
+% \printbibliography[heading=pubtype,title={\printinfo{\faBook}{Books}},type=book]
+
+% \divider
+
+% \printbibliography[heading=pubtype,title={\printinfo{\faFile*[regular]}{Journal Articles}}, type=article]
+
+% \divider
+
+% \printbibliography[heading=pubtype,title={\printinfo{\faUsers}{Conference Proceedings}},type=inproceedings]
+
+%% Switch to the right column. This will now automatically move to the second
+%% page if the content is too long.
+\switchcolumn
+
+\cvsection{Skills}
+
+\textbf{Gen AI Stack}\\[3pt]
+\cvtag{Claude Code}
+\cvtag{Claude Agent SDK}
+\cvtag{Bedrock}
+\cvtag{vLLM}
+\cvtag{LiteLLM}
+
+\divider
+
+\textbf{Accelerated Compute}\\[3pt]
+\cvtag{CUDA}
+\cvtag{TensorRT}
+\cvtag{Warp}
+\break
+\cvtag{CuTile}
+\cvtag{MKL}
+\cvtag{TBB}
+\cvtag{SIMD}
+
+\divider
+
+\textbf{ROS Stack}\\[3pt]
+\cvtag{Omniverse}
+\cvtag{OpenCV}
+\cvtag{Isaac Sim}
+\cvtag{Newton}
+\cvtag{Jetson}
+\cvtag{Python}
+\cvtag{C++20}
+
+\divider
+
+\textbf{Cloud Stack}\\[3pt]
+\cvtag{AWS Serverless}
+\cvtag{SageMaker}
+
+\divider
+
+\textbf{Frontend Stack}\\[3pt]
+\cvtag{React}
+\cvtag{TypeScript}
+\cvtag{Three.js}
+
+\cvsection{Education}
+
+\cvevent{M.S. Computer Science}{Colorado School of Mines}{}{}
+\begin{itemize}[leftmargin=1.8em, itemindent=-1.8em]
+    \item[] \faCalendar ~Aug 2018 -- Dec 2019
+    \item[] \faCrosshairs ~Robotics, HPC ~~~ \faStar GPA 3.96
+    \item[] \faBook ~Courses:  Computer Vision, \break Parallel Computing, Robotics, \break Computer Architecture
+    \item[] \faFile ~Paper: Collaborative Localization for Occluded Objects in Connected \break Vehicular Platform \break 4th author, \textit{2019 IEEE 90th \break Vehicular Technology Conference}
+\end{itemize}
+\divider
+\cvevent{\break B.S. Applied Physics}{University of Science and \break Technology of China}{}{}
+
+\begin{itemize}[leftmargin=1.8em, itemindent=-1.8em]
+    \item[] \faCalendar ~Sep 2007 -- June 2011
+    \item[] \faCrosshairs ~Condensed Matter Physics
+    \item[] \faFile ~Paper: Speed of Last Vehicle \break Feedback Strategy in Intelligent \break Transportation Systems \break 3rd author, \textit{International Journal of Modern Physics C, 2011}
+\end{itemize}
+
+\cvsection{Interests}
+
+% Adapted from @Jake's answer from http://tex.stackexchange.com/a/82729/226
+% \wheelchart{outer radius}{inner radius}{
+% comma-separated list of value/text width/color/detail}
+% Some ad-hoc tweaking to adjust the labels so that they don't overlap
+\hspace*{-11em}  %% quick hack to move the wheelchart a bit left
+\wheelchart{1.2cm}{0.2cm}{%
+  5/8em/accent!0/Badminton,
+  30/9em/accent!60/Traveling,
+  10/13em/accent!30/Gaming,
+  20/11em/accent!50/Hiking,
+  20/11em/accent!35/Cooking,
+  15/11em/accent!20/Reading
+}
+
+\cvsection{Conferences}
+\begin{itemize}[leftmargin=1.8em, itemindent=-1.8em]
+    \item[] \faCalendar ~SIGGRAPH 2024
+    \item[] \faCalendar ~NVIDIA GTC 2025
+    \item[] \faCalendar ~NVIDIA GTC 2026
+    \item[] \faCalendar ~SIGGRAPH 2026
+\end{itemize}
+
+% \cvsection{Most Proud of}
+
+% \cvachievement{\faTrophy}{Courage I had}{to take a sinking ship and try to make it float}
+
+% \divider
+
+% \cvachievement{\faHeartbeat}{Persistence \& Loyalty}{I showed despite the hard moments and my willingness to stay with Yahoo after the acquisition}
+
+% \divider
+
+% \cvachievement{\faChartLine}{Google's Growth}{from a hundred thousand searches per day to over a billion}
+
+% \divider
+
+% \cvachievement{\faFemale}{Inspiring women in tech}{Youngest CEO on Fortune's list of 50 most powerful women}
+
+% \newpage
+
+% \cvsection{Referees}
+
+% % \cvref{name}{email}{mailing address}
+% \cvref{Prof.\ Alpha Beta}{Institute}{a.beta@university.edu}
+% {Address Line 1\\Address line 2}
+
+% \divider
+
+% \cvref{Prof.\ Gamma Delta}{Institute}{g.delta@university.edu}
+% {Address Line 1\\Address line 2}
+
+\end{paracol}
+
+\end{document}

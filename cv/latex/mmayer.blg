@@ -1,0 +1,9 @@
+[0] Config.pm:328> INFO - This is Biber 2.21
+[0] Config.pm:331> INFO - Logfile is 'mmayer.blg'
+[28] biber:342> INFO - === Mon Mar  2, 2026, 02:26:40
+[38] Biber.pm:421> INFO - Reading 'mmayer.bcf'
+[67] Biber.pm:1002> INFO - Found 0 citekeys in bib section 0
+[74] bbl.pm:676> INFO - Writing 'mmayer.bbl' with encoding 'UTF-8'
+[74] bbl.pm:779> INFO - Output to mmayer.bbl
+[74] Biber.pm:132> WARN - The file 'mmayer.bcf' does not contain any citations!
+[74] Biber.pm:134> INFO - WARNINGS: 1

@@ -507,7 +507,192 @@ import { animations } from './clawd-animations/index.js?v=4';
         model.scale.copy(DEFAULT_SCALE);
         scene.add(model);
 
+        var fallback = container.querySelector('.clawd-fallback');
+        if (fallback) fallback.remove();
+
         idleUntil = clock.getElapsedTime() + 2;
+        loop();
+    });
+})();
+
+/* =============================================================
+   Mini Clawd Viewer — lightweight version for card preview
+   ============================================================= */
+(function () {
+    const container = document.getElementById('clawd-mini');
+    if (!container) return;
+
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    container.appendChild(renderer.domElement);
+
+    /* ---- Animation keyword label ---- */
+    const animLabel = document.createElement('div');
+    animLabel.className = 'clawd-mini-label';
+    container.appendChild(animLabel);
+    function showLabel(text) { animLabel.textContent = text; animLabel.style.opacity = '1'; }
+    function hideLabel() { animLabel.style.opacity = '0'; }
+
+    /* ---- Animation picker handle (inconspicuous dot) ---- */
+    const pickerDot = document.createElement('div');
+    pickerDot.style.cssText = 'position:absolute;bottom:10px;left:10px;width:8px;height:8px;border-radius:50%;background:rgba(218,119,86,0.25);cursor:pointer;z-index:6;transition:background 0.3s ease,transform 0.2s ease;pointer-events:auto;';
+    pickerDot.title = 'Pick animation';
+    const pickerMenu = document.createElement('div');
+    pickerMenu.style.cssText = 'position:absolute;bottom:24px;left:10px;background:rgba(20,20,25,0.92);border:1px solid rgba(218,119,86,0.3);border-radius:6px;padding:4px 0;max-height:260px;overflow-y:auto;z-index:7;display:none;backdrop-filter:blur(8px);scrollbar-width:thin;scrollbar-color:rgba(218,119,86,0.3) transparent;pointer-events:auto;';
+    pickerDot.addEventListener('mouseenter', function () { pickerDot.style.background = 'rgba(218,119,86,0.7)'; pickerDot.style.transform = 'scale(1.5)'; });
+    pickerDot.addEventListener('mouseleave', function () { if (!pickerMenu.classList.contains('_open')) { pickerDot.style.background = 'rgba(218,119,86,0.25)'; pickerDot.style.transform = 'scale(1)'; } });
+    pickerDot.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var open = pickerMenu.style.display !== 'none';
+        pickerMenu.style.display = open ? 'none' : 'block';
+        if (open) { pickerMenu.classList.remove('_open'); pickerDot.style.background = 'rgba(218,119,86,0.25)'; pickerDot.style.transform = 'scale(1)'; }
+        else pickerMenu.classList.add('_open');
+    });
+    document.addEventListener('click', function () { pickerMenu.style.display = 'none'; pickerMenu.classList.remove('_open'); pickerDot.style.background = 'rgba(218,119,86,0.25)'; pickerDot.style.transform = 'scale(1)'; });
+    container.appendChild(pickerDot);
+    container.appendChild(pickerMenu);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(40, 16 / 9, 0.1, 100);
+    camera.position.set(0.3, 0.6, 4.0);
+    camera.lookAt(0, -0.2, 0);
+
+    function updateSize() {
+        var w = container.clientWidth || 200;
+        var h = container.clientHeight || 200;
+        if (w > 0 && h > 0) {
+            renderer.setSize(w, h);
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+        }
+    }
+    updateSize();
+    var _rt;
+    window.addEventListener('resize', function () { clearTimeout(_rt); _rt = setTimeout(updateSize, 150); });
+
+    scene.add(new THREE.AmbientLight(0xffffff, 1.0));
+    var dl = new THREE.DirectionalLight(0xffffff, 1.4);
+    dl.position.set(2, 3, 4);
+    scene.add(dl);
+    var rl = new THREE.DirectionalLight(0x9999ff, 0.5);
+    rl.position.set(-2, 1, -3);
+    scene.add(rl);
+
+    const DEFAULT_POS = new THREE.Vector3(0.0, -0.3, -0.5);
+    const DEFAULT_SCALE = new THREE.Vector3(0.6, 0.6, 0.6);
+
+    function resetModel(m) { m.position.copy(DEFAULT_POS); m.rotation.set(0, 0, 0); m.scale.copy(DEFAULT_SCALE); m.visible = true; }
+
+    let model = null;
+    let currentAnim = null;
+    let currentIndex = -1;
+    let animStart = 0;
+    let idleUntil = 0;
+    const IDLE_GAP = 2;
+    const IDLE_SPIN = 0.15;
+
+    let blending = false;
+    let blendStart = 0;
+    const BLEND_DUR = 0.6;
+    const bf = { px: 0, py: 0, pz: 0, rx: 0, ry: 0, rz: 0, sx: 1, sy: 1, sz: 1 };
+
+    function captureBlend() {
+        bf.px = model.position.x; bf.py = model.position.y; bf.pz = model.position.z;
+        bf.rx = model.rotation.x; bf.ry = model.rotation.y; bf.rz = model.rotation.z;
+        bf.sx = model.scale.x; bf.sy = model.scale.y; bf.sz = model.scale.z;
+    }
+    function ss(t) { return t * t * (3 - 2 * t); }
+
+    var _sh = [], _sp = 0;
+    function reshuffle() {
+        _sh = []; for (var i = 0; i < animations.length; i++) _sh.push(i);
+        for (var j = _sh.length - 1; j > 0; j--) { var k = Math.floor(Math.random() * (j + 1)); var tmp = _sh[j]; _sh[j] = _sh[k]; _sh[k] = tmp; }
+        if (_sh.length > 1 && _sh[0] === currentIndex) { var sw = 1 + Math.floor(Math.random() * (_sh.length - 1)); var t2 = _sh[0]; _sh[0] = _sh[sw]; _sh[sw] = t2; }
+        _sp = 0;
+    }
+    function pickNext() { if (animations.length === 0) return -1; if (animations.length === 1) return 0; if (_sp >= _sh.length) reshuffle(); return _sh[_sp++]; }
+
+    function beginAnim(idx) {
+        if (currentAnim) { try { currentAnim.cleanup(model, scene, THREE); } catch (_) {} resetModel(model); }
+        blending = false; currentIndex = idx; currentAnim = animations[idx]; animStart = clock.getElapsedTime();
+        try { currentAnim.init(model, scene, THREE); } catch (_) {}
+        showLabel(currentAnim.name || '');
+    }
+
+    /* ---- Populate animation picker menu ---- */
+    (function () {
+        for (var i = 0; i < animations.length; i++) {
+            (function (idx) {
+                var item = document.createElement('div');
+                item.textContent = animations[idx].name;
+                item.style.cssText = 'padding:4px 12px;font-family:"Inter",system-ui,sans-serif;font-size:11px;color:rgba(255,255,255,0.7);cursor:pointer;white-space:nowrap;transition:background 0.15s ease,color 0.15s ease;';
+                item.addEventListener('mouseenter', function () { item.style.background = 'rgba(218,119,86,0.25)'; item.style.color = '#fff'; });
+                item.addEventListener('mouseleave', function () { item.style.background = 'transparent'; item.style.color = 'rgba(255,255,255,0.7)'; });
+                item.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    pickerMenu.style.display = 'none';
+                    pickerMenu.classList.remove('_open');
+                    pickerDot.style.background = 'rgba(218,119,86,0.25)';
+                    pickerDot.style.transform = 'scale(1)';
+                    if (model) beginAnim(idx);
+                });
+                pickerMenu.appendChild(item);
+            })(i);
+        }
+    })();
+
+    const clock = new THREE.Clock();
+    let prevTime = 0;
+
+    function loop() {
+        requestAnimationFrame(loop);
+        if (!model) return;
+        const t = clock.getElapsedTime();
+        const dt = Math.min(t - prevTime, 0.05);
+        prevTime = t;
+
+        if (currentAnim) {
+            const elapsed = t - animStart;
+            const progress = Math.min(elapsed / currentAnim.duration, 1);
+            try { currentAnim.update(model, scene, progress, t, dt, THREE); } catch (_) {}
+            if (progress >= 1) {
+                try { currentAnim.cleanup(model, scene, THREE); } catch (_) {}
+                model.visible = true; captureBlend(); blending = true; blendStart = t; currentAnim = null;
+                hideLabel();
+            }
+        } else if (blending) {
+            const bp = Math.min((t - blendStart) / BLEND_DUR, 1);
+            const e = ss(bp);
+            model.position.x = bf.px + (DEFAULT_POS.x - bf.px) * e;
+            model.position.y = bf.py + (DEFAULT_POS.y - bf.py) * e;
+            model.position.z = bf.pz + (DEFAULT_POS.z - bf.pz) * e;
+            model.rotation.x = bf.rx * (1 - e); model.rotation.y = bf.ry * (1 - e); model.rotation.z = bf.rz * (1 - e);
+            model.scale.x = bf.sx + (DEFAULT_SCALE.x - bf.sx) * e;
+            model.scale.y = bf.sy + (DEFAULT_SCALE.y - bf.sy) * e;
+            model.scale.z = bf.sz + (DEFAULT_SCALE.z - bf.sz) * e;
+            if (bp >= 1) { resetModel(model); blending = false; idleUntil = t + IDLE_GAP; }
+        } else {
+            model.rotation.y = Math.sin(t * IDLE_SPIN) * 0.2;
+            if (t >= idleUntil && animations.length > 0) beginAnim(pickNext());
+        }
+        renderer.render(scene, camera);
+    }
+
+    const gltfLoader = new GLTFLoader();
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+    dracoLoader.setDecoderConfig({ type: 'js' });
+    gltfLoader.setDRACOLoader(dracoLoader);
+
+    gltfLoader.load('clawd-compressed.glb', function (gltf) {
+        model = gltf.scene;
+        model.position.copy(DEFAULT_POS);
+        model.scale.copy(DEFAULT_SCALE);
+        scene.add(model);
+        var fb = container.querySelector('.clawd-fallback');
+        if (fb) fb.remove();
+        idleUntil = clock.getElapsedTime() + 1;
         loop();
     });
 })();
