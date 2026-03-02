@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.3.1)  2 MAR 2026 02:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.3.1)  2 MAR 2026 14:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1708,64 +1708,64 @@ LaTeX Font Info:    Font shape `T1/lato-TLF/b/n' will be
 (Font)              scaled to size 10.0pt on input line 131.
 LaTeX Font Info:    Font shape `T1/lato-TLF/m/n' will be
 (Font)              scaled to size 9.0pt on input line 131.
-LaTeX Font Info:    External font `cmex7' loaded for size
-(Font)              <6> on input line 135.
+LaTeX Font Info:    Font shape `T1/lato-TLF/b/n' will be
+(Font)              scaled to size 9.0pt on input line 133.
 LaTeX Font Info:    Trying to load font information for U+fontawesomefree3 on i
-nput line 141.
+nput line 133.
 
 (/usr/local/texlive/2025/texmf-dist/tex/latex/fontawesome5/ufontawesomefree3.fd
 )
-LaTeX Font Info:    Font shape `T1/lato-TLF/b/n' will be
-(Font)              scaled to size 9.0pt on input line 149.
+LaTeX Font Info:    External font `cmex7' loaded for size
+(Font)              <6> on input line 136.
 LaTeX Font Info:    Font shape `U/fontawesomebrands0/solid/n' in size <9> not a
 vailable
 (Font)              Font shape `U/fontawesomebrands0/regular/n' tried instead o
-n input line 150.
+n input line 139.
 
-Underfull \hbox (badness 2932) in paragraph at lines 179--180
+Underfull \hbox (badness 2932) in paragraph at lines 181--182
 [][] \T1/lato-TLF/m/n/9 Rule based trans-ac-tion fraud de-tec-tion for For-eign
  Ex-change Man-age-ment.  
  []
 
 
-Overfull \hbox (3.44992pt too wide) in paragraph at lines 228--233
+Overfull \hbox (3.44992pt too wide) in paragraph at lines 230--235
 []  [] 
  []
 
 
-Overfull \hbox (7.03983pt too wide) in paragraph at lines 249--256
+Overfull \hbox (7.03983pt too wide) in paragraph at lines 251--258
 []  []  [] 
  []
 
 LaTeX Font Info:    Font shape `T1/lato-TLF/m/it' will be
-(Font)              scaled to size 9.0pt on input line 277.
+(Font)              scaled to size 9.0pt on input line 279.
 
-Underfull \hbox (badness 4120) in paragraph at lines 277--278
+Underfull \hbox (badness 4120) in paragraph at lines 279--280
 \T1/lato-TLF/m/n/9 Vehicular Plat-form  
  []
 
 
-Underfull \hbox (badness 1189) in paragraph at lines 280--280
+Underfull \hbox (badness 1189) in paragraph at lines 282--282
 [][] \T1/lato-TLF/b/n/10 Uni-ver-sity of Sci-ence and  
  []
 
 
-Underfull \hbox (badness 1533) in paragraph at lines 285--286
+Underfull \hbox (badness 1533) in paragraph at lines 287--288
 \T1/lato-TLF/m/n/9 Transportation Sys-tems  
  []
 
 
-Underfull \hbox (badness 2057) in paragraph at lines 302--302
+Underfull \hbox (badness 2057) in paragraph at lines 304--304
  [][][][]\T1/lato-TLF/m/n/9 Traveling[][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 302--302
+Underfull \hbox (badness 10000) in paragraph at lines 304--304
  [][][][]\T1/lato-TLF/m/n/9 Gaming[][]
  []
 
 
-Overfull \hbox (83.14127pt too wide) in paragraph at lines 294--302
+Overfull \hbox (83.14127pt too wide) in paragraph at lines 296--304
  []|  [] 
  []
 
@@ -1791,7 +1791,7 @@ Package logreq Info: Writing requests to 'mmayer.run.xml'.
 Here is how much of TeX's memory you used:
  43790 strings out of 467533
  881771 string characters out of 5419496
- 1661323 words of memory out of 5000000
+ 1662324 words of memory out of 5000000
  72052 multiletter control sequences out of 15000+600000
  922450 words of font info for 82 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1804,7 +1804,7 @@ ts/type1/public/fontawesome5/FontAwesome5Free-Solid.pfb></usr/local/texlive/202
 exmf-dist/fonts/type1/typoland/lato/Lato-Italic.pfb></usr/local/texlive/2025/te
 xmf-dist/fonts/type1/typoland/lato/Lato-Regular.pfb></usr/local/texlive/2025/te
 xmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb>
-Output written on mmayer.pdf (2 pages, 199744 bytes).
+Output written on mmayer.pdf (2 pages, 202654 bytes).
 PDF statistics:
  78 PDF objects out of 1000 (max. 8388607)
  3 named destinations out of 1000 (max. 500000)
