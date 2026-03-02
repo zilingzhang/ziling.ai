@@ -272,9 +272,11 @@
 }
 
 /* --------------------------------------------------------------------------
-   Fullscreen toggle — standalone liquid glass pill
+   Glass pill — shared base for all control-row toggle buttons
    -------------------------------------------------------------------------- */
-.fullscreen-toggle {
+.fullscreen-toggle,
+.narrator-toggle,
+.home-pill {
   padding: 1rem 1.25rem;
   background: linear-gradient(135deg,
     rgba(255, 255, 255, 0.45) 0%,
@@ -294,11 +296,26 @@
   transition: all 0.3s;
 }
 
-.fullscreen-toggle:hover {
+.fullscreen-toggle:hover,
+.narrator-toggle:hover,
+.home-pill:hover {
   background: linear-gradient(135deg,
     rgba(255, 255, 255, 0.55) 0%,
     rgba(255, 255, 255, 0.35) 100%);
   border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* --- Per-element overrides --- */
+
+.narrator-toggle {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.home-pill {
+  text-decoration: none;
+  flex-shrink: 0;
+  order: 99;
 }
 
 .fullscreen-toggle.active {
@@ -307,39 +324,6 @@
     rgba(59, 130, 246, 0.15) 100%);
   border-color: rgba(255, 255, 255, 0.4);
   color: #1d4ed8;
-}
-
-/* --------------------------------------------------------------------------
-   Toggle button in the button group (mirrors .bs-debug-toggle)
-   -------------------------------------------------------------------------- */
-.narrator-toggle {
-  padding: 1rem 1.25rem;
-  background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.45) 0%,
-    rgba(255, 255, 255, 0.25) 100%);
-  backdrop-filter: blur(16px) saturate(200%);
-  -webkit-backdrop-filter: blur(16px) saturate(200%);
-  color: #2c2c2c;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 50px;
-  cursor: pointer;
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.06),
-    inset 0 1px 1px rgba(255, 255, 255, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s;
-  /* Always visible */
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.narrator-toggle:hover {
-  background: linear-gradient(135deg,
-    rgba(255, 255, 255, 0.55) 0%,
-    rgba(255, 255, 255, 0.35) 100%);
-  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .narrator-toggle.active {
@@ -559,6 +543,12 @@
   }
 
   .pill-wrapper__body {
+    transition: none;
+  }
+
+  .fullscreen-toggle,
+  .narrator-toggle,
+  .home-pill {
     transition: none;
   }
 }
