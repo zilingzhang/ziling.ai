@@ -519,8 +519,8 @@ a { color: inherit; }
   font-size: 0.72rem; color: #b5afa8; letter-spacing: 0.5px;
 }
 
-/* ── Mobile / Half-screen: < 960px ───────────────── */
-@media (max-width: 960px) {
+/* ── Mobile / Half-screen: < 1080px ──────────────── */
+@media (max-width: 1080px) {
   .desk { grid-template-columns: 1fr; }
   .sidebar {
     position: relative; width: 100%; height: auto;
